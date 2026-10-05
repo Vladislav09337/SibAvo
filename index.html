@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SibAvto — Интернет-магазин автозапчастей</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header class="header">
+        <div class="container header__inner">
+            <a href="index.html" class="logo">
+                <span class="logo__text">SibAvto</span>
+            </a>
+            <nav class="nav">
+                <a href="index.html" class="nav__link nav__link--active">Главная</a>
+                <a href="catalog.html" class="nav__link">Каталог</a>
+                <a href="about.html" class="nav__link">О компании</a>
+                <a href="contacts.html" class="nav__link">Контакты</a>
+            </nav>
+            <div class="header__actions">
+                <a href="cart.html" class="header__icon">Корзина</a>
+                <a href="login.html" class="btn btn--outline">Войти</a>
+            </div>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <h1 class="hero__title">Автозапчасти с гарантией качества</h1>
+            <p class="hero__subtitle">Лицензированный продавец. Оригинальные запчасти и качественные аналоги</p>
+            <a href="catalog.html" class="btn btn--primary btn--large">Перейти в каталог</a>
+        </div>
+    </section>
+
+    <section class="search">
+        <div class="container">
+            <h2 class="section__title">Поиск по VIN-номеру</h2>
+            <form class="search__form">
+                <input type="text" class="search__input" placeholder="Введите VIN-номер автомобиля" maxlength="17">
+                <button type="submit" class="btn btn--primary">Найти запчасти</button>
+            </form>
+        </div>
+    </section>
+
+    <section class="categories">
+        <div class="container">
+            <h2 class="section__title">Категории товаров</h2>
+            <div class="categories__grid">
+                <a href="catalog.html" class="category__card">
+                    <span class="category__name">Двигатель</span>
+                </a>
+                <a href="catalog.html" class="category__card">
+                    <span class="category__name">Тормозная система</span>
+                </a>
+                <a href="catalog.html" class="category__card">
+                    <span class="category__name">Подвеска</span>
+                </a>
+                <a href="catalog.html" class="category__card">
+                    <span class="category__name">Электрика</span>
+                </a>
+                <a href="catalog.html" class="category__card">
+                    <span class="category__name">Кузовные детали</span>
+                </a>
+                <a href="catalog.html" class="category__card">
+                    <span class="category__name">Масла и жидкости</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <section class="popular">
+        <div class="container">
+            <h2 class="section__title">Популярные товары</h2>
+            <div class="products__grid">
+                <div class="product__card">
+                    <div class="product__image"></div>
+                    <h3 class="product__name">Тормозные колодки Bosch</h3>
+                    <p class="product__article">Артикул: BOS-0986AB1234</p>
+                    <p class="product__price">3 500 руб.</p>
+                    <span class="product__status product__status--in">В наличии</span>
+                    <button class="btn btn--primary btn--small">В корзину</button>
+                </div>
+                <div class="product__card">
+                    <div class="product__image"></div>
+                    <h3 class="product__name">Свечи зажигания Denso</h3>
+                    <p class="product__article">Артикул: DEN-90919-01253</p>
+                    <p class="product__price">1 200 руб.</p>
+                    <span class="product__status product__status--in">В наличии</span>
+                    <button class="btn btn--primary btn--small">В корзину</button>
+                </div>
+                <div class="product__card">
+                    <div class="product__image"></div>
+                    <h3 class="product__name">Масляный фильтр Mann</h3>
+                    <p class="product__article">Артикул: MAN-W9142</p>
+                    <p class="product__price">450 руб.</p>
+                    <span class="product__status product__status--in">В наличии</span>
+                    <button class="btn btn--primary btn--small">В корзину</button>
+                </div>
+                <div class="product__card">
+                    <div class="product__image"></div>
+                    <h3 class="product__name">Амортизатор Sachs</h3>
+                    <p class="product__article">Артикул: SACH-314567</p>
+                    <p class="product__price">7 200 руб.</p>
+                    <span class="product__status product__status--order">Под заказ</span>
+                    <button class="btn btn--primary btn--small">В корзину</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="features">
+        <div class="container">
+            <h2 class="section__title">Почему выбирают SibAvto</h2>
+            <div class="features__grid">
+                <div class="feature__card">
+                    <h3>Лицензированный продавец</h3>
+                    <p>Официальная гарантия на все запчасти</p>
+                </div>
+                <div class="feature__card">
+                    <h3>Быстрая доставка</h3>
+                    <p>Самовывоз или курьер по Новосибирску</p>
+                </div>
+                <div class="feature__card">
+                    <h3>Подбор по VIN</h3>
+                    <p>Точная совместимость с вашим авто</p>
+                </div>
+                <div class="feature__card">
+                    <h3>Честные цены</h3>
+                    <p>Прямые поставки от производителей</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container footer__inner">
+            <div class="footer__col">
+                <h4>SibAvto</h4>
+                <p>Лицензированный продавец автозапчастей</p>
+                <p>Лицензия № 54-АА-123456 от 01.01.2020</p>
+            </div>
+            <div class="footer__col">
+                <h4>Разделы</h4>
+                <a href="catalog.html">Каталог</a>
+                <a href="about.html">О компании</a>
+                <a href="contacts.html">Контакты</a>
+            </div>
+            <div class="footer__col">
+                <h4>Контакты</h4>
+                <p>+7 (383) 123-45-67</p>
+                <p>info@sibavto.ru</p>
+                <p>г. Новосибирск, ул. Автозаводская, 15</p>
+            </div>
+        </div>
+        <div class="footer__bottom">
+            <p>2026 SibAvto. Все права защищены.</p>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+</body>
+</html>

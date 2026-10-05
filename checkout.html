@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Оформление заказа — SibAvto</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header class="header">
+        <div class="container header__inner">
+            <a href="index.html" class="logo"><span class="logo__text">SibAvto</span></a>
+            <nav class="nav">
+                <a href="index.html" class="nav__link">Главная</a>
+                <a href="catalog.html" class="nav__link">Каталог</a>
+                <a href="about.html" class="nav__link">О компании</a>
+                <a href="contacts.html" class="nav__link">Контакты</a>
+            </nav>
+            <div class="header__actions">
+                <a href="cart.html" class="header__icon">Корзина</a>
+                <a href="login.html" class="btn btn--outline">Войти</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="checkout">
+        <div class="container">
+            <h1 class="page__title">Оформление заказа</h1>
+
+            <form class="checkout__form">
+                <section class="checkout__section">
+                    <h2>Контактные данные</h2>
+                    <div class="form__row">
+                        <input type="text" placeholder="ФИО" required>
+                        <input type="tel" placeholder="Телефон" required>
+                    </div>
+                    <input type="email" placeholder="E-mail" required>
+                </section>
+
+                <section class="checkout__section">
+                    <h2>Доставка</h2>
+                    <label class="radio">
+                        <input type="radio" name="delivery" value="pickup" checked>
+                        <span>Самовывоз (г. Новосибирск, ул. Автозаводская, 15)</span>
+                    </label>
+                    <label class="radio">
+                        <input type="radio" name="delivery" value="courier">
+                        <span>Курьерская доставка</span>
+                    </label>
+                    <input type="text" placeholder="Адрес доставки" class="checkout__address">
+                </section>
+
+                <section class="checkout__section">
+                    <h2>Оплата</h2>
+                    <label class="radio">
+                        <input type="radio" name="payment" value="online" checked>
+                        <span>Онлайн оплата картой</span>
+                    </label>
+                    <label class="radio">
+                        <input type="radio" name="payment" value="cash">
+                        <span>Наличными при получении</span>
+                    </label>
+                    <label class="radio">
+                        <input type="radio" name="payment" value="card">
+                        <span>Картой при получении</span>
+                    </label>
+                </section>
+
+                <section class="checkout__section">
+                    <h2>Комментарий к заказу</h2>
+                    <textarea placeholder="Комментарий (необязательно)"></textarea>
+                </section>
+
+                <button type="submit" class="btn btn--primary btn--large btn--full">Подтвердить заказ</button>
+            </form>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer__inner">
+            <div class="footer__col">
+                <h4>SibAvto</h4>
+                <p>Лицензированный продавец автозапчастей</p>
+            </div>
+            <div class="footer__col">
+                <h4>Разделы</h4>
+                <a href="catalog.html">Каталог</a>
+                <a href="about.html">О компании</a>
+                <a href="contacts.html">Контакты</a>
+            </div>
+            <div class="footer__col">
+                <h4>Контакты</h4>
+                <p>+7 (383) 123-45-67</p>
+                <p>info@sibavto.ru</p>
+            </div>
+        </div>
+        <div class="footer__bottom">
+            <p>2026 SibAvto. Все права защищены.</p>
+        </div>
+    </footer>
+</body>
+</html>
