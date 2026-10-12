@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Интеграции с площадками — SibAvto</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header class="header">
+        <div class="container header__inner">
+            <a href="index.html" class="logo"><span class="logo__text">Sib<span>Avto</span></span></a>
+            <nav class="nav">
+                <a href="index.html" class="nav__link">Главная</a>
+                <a href="catalog.html" class="nav__link">Каталог</a>
+                <a href="employees.html" class="nav__link">Сотрудники</a>
+                <a href="about.html" class="nav__link">О компании</a>
+                <a href="contacts.html" class="nav__link">Контакты</a>
+            </nav>
+            <div class="header__actions">
+                <a href="profile.html#favorites" class="header__icon header__favorites">Избранное</a>
+                <a href="cart.html" class="header__icon">Корзина</a>
+                <a href="login.html" class="btn btn--outline">Войти</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="integrations">
+        <div class="container">
+            <h1 class="page__title">Интеграции с торговыми площадками</h1>
+            <p class="integrations__subtitle">
+                Автоматическая выгрузка товаров SibAvto на Авито и Дром через XML-фиды.
+                Синхронизация остатков и цен в реальном времени.
+            </p>
+
+            <!-- Статус-бар -->
+            <div class="integrations__status">
+                <div class="status__item">
+                    <span class="status__dot status__dot--online"></span>
+                    <span>Последняя синхронизация: <strong id="lastSyncTime">никогда</strong></span>
+                </div>
+                <div class="status__item">
+                    <span>Товаров в каталоге: <strong id="totalProducts">0</strong></span>
+                </div>
+                <div class="status__item">
+                    <span>Активных выгрузок: <strong id="activeFeeds">0</strong></span>
+                </div>
+            </div>
+
+            <!-- Карточки площадок -->
+            <div class="integrations__grid">
+                <!-- АВИТО -->
+                <div class="platform__card">
+                    <div class="platform__header">
+                        <div class="platform__logo platform__logo--avito">A</div>
+                        <div>
+                            <h2 class="platform__name">Авито</h2>
+                            <p class="platform__status">
+                                <span class="status__dot status__dot--online"></span>
+                                Подключено
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="platform__info">
+                        <p><strong>Формат:</strong> XML-фид (Avito Autoload)</p>
+                        <p><strong>Обновление:</strong> каждые 30 минут</p>
+                        <p><strong>Категория:</strong> Запчасти и аксессуары</p>
+                        <p><strong>ID магазина:</strong> sibavto_msk</p>
+                    </div>
+
+                    <div class="platform__stats">
+                        <div class="platform__stat">
+                            <span id="avitoCount">0</span>
+                            <small>товаров</small>
+                        </div>
+                        <div class="platform__stat">
+                            <span id="avitoLastSync">—</span>
+                            <small>посл. синхр.</small>
+                        </div>
+                    </div>
+
+                    <div class="platform__actions">
+                        <button class="btn btn--primary" id="avitoGenerate">
+                            Скачать XML-фид
+                        </button>
+                        <button class="btn btn--outline" id="avitoSync" style="color: #1a2332; border-color: #1a2332;">
+                            Синхронизировать
+                        </button>
+                    </div>
+
+                    <div class="platform__progress" id="avitoProgress" style="display: none;">
+                        <div class="progress-bar">
+                            <div class="progress-bar__fill" id="avitoProgressFill"></div>
+                        </div>
+                        <p class="progress-text" id="avitoProgressText">Синхронизация...</p>
+                    </div>
+                </div>
+
+                <!-- ДРОМ -->
+                <div class="platform__card">
+                    <div class="platform__header">
+                        <div class="platform__logo platform__logo--drom">Д</div>
+                        <div>
+                            <h2 class="platform__name">Дром</h2>
+                            <p class="platform__status">
+                                <span class="status__dot status__dot--online"></span>
+                                Подключено
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="platform__info">
+                        <p><strong>Формат:</strong> XML-фид (Drom Parts)</p>
+                        <p><strong>Обновление:</strong> каждые 60 минут</p>
+                        <p><strong>Категория:</strong> Автозапчасти</p>
+                        <p><strong>ID магазина:</strong> sibavto_54</p>
+                    </div>
+
+                    <div class="platform__stats">
+                        <div class="platform__stat">
+                            <span id="dromCount">0</span>
+                            <small>товаров</small>
+                        </div>
+                        <div class="platform__stat">
+                            <span id="dromLastSync">—</span>
+                            <small>посл. синхр.</small>
+                        </div>
+                    </div>
+
+                    <div class="platform__actions">
+                        <button class="btn btn--primary" id="dromGenerate">
+                            Скачать XML-фид
+                        </button>
+                        <button class="btn btn--outline" id="dromSync" style="color: #1a2332; border-color: #1a2332;">
+                            Синхронизировать
+                        </button>
+                    </div>
+
+                    <div class="platform__progress" id="dromProgress" style="display: none;">
+                        <div class="progress-bar">
+                            <div class="progress-bar__fill" id="dromProgressFill"></div>
+                        </div>
+                        <p class="progress-text" id="dromProgressText">Синхронизация...</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Настройки выгрузки -->
+            <section class="integrations__settings">
+                <h2>Настройки выгрузки</h2>
+
+                <div class="settings__grid">
+                    <div class="settings__item">
+                        <h3>Какие товары выгружать</h3>
+                        <label><input type="checkbox" id="setInStock" checked> Только в наличии</label>
+                        <label><input type="checkbox" id="setOnOrder"> Включая "Под заказ"</label>
+                        <label><input type="checkbox" id="setWithPrice" checked> Только с ценой</label>
+                    </div>
+
+                    <div class="settings__grid-column">
+                        <h3>Бренды для выгрузки</h3>
+                        <label><input type="checkbox" class="brand-checkbox" value="bosch" checked> Bosch</label>
+                        <label><input type="checkbox" class="brand-checkbox" value="denso" checked> Denso</label>
+                        <label><input type="checkbox" class="brand-checkbox" value="mann" checked> Mann-Filter</label>
+                        <label><input type="checkbox" class="brand-checkbox" value="ngk" checked> NGK</label>
+                        <label><input type="checkbox" class="brand-checkbox" value="brembo" checked> Brembo</label>
+                    </div>
+
+                    <div class="settings__item">
+                        <h3>Наценка для площадок</h3>
+                        <label>
+                            Авито, %: <input type="number" id="avitoMargin" value="10" min="0" max="50">
+                        </label>
+                        <label>
+                            Дром, %: <input type="number" id="dromMargin" value="8" min="0" max="50">
+                        </label>
+                    </div>
+                </div>
+            </section>
+
+            <!-- История выгрузок -->
+            <section class="integrations__history">
+                <h2>История выгрузок</h2>
+                <div id="syncHistory">
+                    <div class="profile__empty">
+                        <p>История пуста. Нажмите «Синхронизировать» для первой выгрузки.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Лог -->
+            <section class="integrations__log">
+                <h2>Лог операций</h2>
+                <div class="log__window" id="logWindow">
+                    <p class="log__line log__line--info">[Система] Страница интеграций загружена</p>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer__inner">
+            <div class="footer__col">
+                <h4>SibAvto</h4>
+                <p>Лицензированный продавец автозапчастей</p>
+                <p>Лицензия № 54-АА-123456 от 01.01.2020</p>
+            </div>
+            <div class="footer__col">
+                <h4>Разделы</h4>
+                <a href="catalog.html">Каталог</a>
+                <a href="employees.html">Сотрудники</a>
+                <a href="about.html">О компании</a>
+                <a href="contacts.html">Контакты</a>
+            </div>
+            <div class="footer__col">
+                <h4>Контакты</h4>
+                <p>+7 (383) 123-45-67</p>
+                <p>info@sibavto.ru</p>
+            </div>
+        </div>
+        <div class="footer__bottom">
+            <p>2026 SibAvto. Все права защищены.</p>
+        </div>
+    </footer>
+
+    <script src="data/products.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/integrations.js"></script>
+    <script src="js/chat-bot.js"></script>
+</body>
+</html>

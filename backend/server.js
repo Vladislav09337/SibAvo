@@ -13,15 +13,12 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// Static files from frontend folder
 app.use(express.static(path.join(__dirname, '..', 'frontend')));
 
-// API routes
 app.use('/api/products', require('./routes/products'));
 app.use('/api/orders', require('./routes/orders'));
 app.use('/api/users', require('./routes/users'));
 
-// API main page
 app.get('/api', (req, res) => {
     res.json({
         message: 'SibAvto API is working!',

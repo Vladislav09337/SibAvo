@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Личный кабинет — SibAvto</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header class="header">
+        <div class="container header__inner">
+            <a href="index.html" class="logo"><span class="logo__text">Sib<span>Avto</span></span></a>
+            <nav class="nav">
+                <a href="index.html" class="nav__link">Главная</a>
+                <a href="catalog.html" class="nav__link">Каталог</a>
+                <a href="about.html" class="nav__link">О компании</a>
+                <a href="contacts.html" class="nav__link">Контакты</a>
+                <a href="employees.html" class="nav__link">Сотрудники</a>
+                <a href="integrations.html" class="nav__link">Интеграции</a>
+            </nav>
+            <div class="header__actions">
+                <a href="profile.html#favorites" class="header__icon header__favorites">Избранное</a>
+                <a href="cart.html" class="header__icon">Корзина</a>
+                <a href="profile.html" class="btn btn--outline" id="userButton">Профиль</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="profile">
+        <div class="container">
+            <h1 class="page__title">Личный кабинет</h1>
+
+            <div class="profile__layout">
+                <aside class="profile__sidebar">
+                    <div class="profile__avatar" id="profileAvatar">A</div>
+                    <h2 class="profile__name" id="profileName">Пользователь</h2>
+                    <p class="profile__phone" id="profilePhone">+7 XXX XXX-XX-XX</p>
+                    <p class="profile__email" id="profileEmail">email@example.com</p>
+
+                    <nav class="profile__menu">
+                        <a href="#" class="profile__menu-item profile__menu-item--active" data-tab="info">Личные данные</a>
+                        <a href="#" class="profile__menu-item" data-tab="orders">Мои заказы</a>
+                        <a href="#" class="profile__menu-item" data-tab="favorites">Избранное</a>
+                        <a href="#" class="profile__menu-item" data-tab="addresses">Адреса доставки</a>
+                        <a href="#" class="profile__menu-item" data-tab="settings">Настройки</a>
+                    </nav>
+
+                    <button class="btn btn--outline btn--full" id="logoutBtn" style="margin-top: 20px; border-color: #e63946; color: #e63946;">Выйти</button>
+                </aside>
+
+                <div class="profile__content">
+                    <section class="profile__tab profile__tab--active" data-tab="info">
+                        <h2>Личные данные</h2>
+                        <form class="profile__form" id="profileInfoForm">
+                            <div class="form__row">
+                                <label>
+                                    ФИО
+                                    <input type="text" id="editFullName">
+                                </label>
+                                <label>
+                                    Телефон
+                                    <input type="tel" id="editPhone">
+                                </label>
+                            </div>
+                            <label>
+                                E-mail
+                                <input type="email" id="editEmail">
+                            </label>
+                            <button type="submit" class="btn btn--primary">Сохранить изменения</button>
+                        </form>
+                    </section>
+
+                    <section class="profile__tab" data-tab="orders">
+                        <h2>Мои заказы</h2>
+                        <div id="ordersList"></div>
+                    </section>
+
+                    <section class="profile__tab" data-tab="favorites">
+                        <h2>Избранное</h2>
+                        <div id="favoritesList"></div>
+                    </section>
+
+                    <section class="profile__tab" data-tab="addresses">
+                        <h2>Адреса доставки</h2>
+
+                        <form class="address__form" id="addressForm">
+                            <div class="form__row">
+                                <label>
+                                    Название адреса
+                                    <input type="text" id="addressLabel" placeholder="Например: Дом, Работа" required>
+                                </label>
+                                <label>
+                                    Город
+                                    <input type="text" id="addressCity" placeholder="Новосибирск" required>
+                                </label>
+                            </div>
+                            <div class="form__row">
+                                <label>
+                                    Улица, дом
+                                    <input type="text" id="addressStreet" placeholder="ул. Ленина, д. 10" required>
+                                </label>
+                                <label>
+                                    Квартира / офис
+                                    <input type="text" id="addressApt" placeholder="кв. 5">
+                                </label>
+                            </div>
+                            <label>
+                                Комментарий курьеру
+                                <input type="text" id="addressComment" placeholder="Домофон 25, позвонить за час">
+                            </label>
+                            <button type="submit" class="btn btn--primary">Добавить адрес</button>
+                        </form>
+
+                        <div id="addressesList" class="addresses__list"></div>
+                    </section>
+
+                    <section class="profile__tab" data-tab="settings">
+                        <h2>Настройки</h2>
+                        <div class="profile__setting">
+                            <label><input type="checkbox" id="notifyOrders" checked> Уведомления о статусе заказов</label>
+                        </div>
+                        <div class="profile__setting">
+                            <label><input type="checkbox" id="notifyPromo" checked> Уведомления об акциях и скидках</label>
+                        </div>
+                        <div class="profile__setting">
+                            <label><input type="checkbox" id="notifyNew"> Уведомления о новых товарах</label>
+                        </div>
+                        <button class="btn btn--primary" id="saveSettingsBtn" style="margin-top: 20px;">Сохранить настройки</button>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer__inner">
+            <div class="footer__col">
+                <h4>SibAvto</h4>
+                <p>Лицензированный продавец автозапчастей</p>
+            </div>
+            <div class="footer__col">
+                <h4>Разделы</h4>
+                <a href="catalog.html">Каталог</a>
+                <a href="employees.html">Сотрудники</a>
+                <a href="about.html">О компании</a>
+                <a href="contacts.html">Контакты</a>
+            </div>
+            <div class="footer__col">
+                <h4>Контакты</h4>
+                <p>+7 (383) 123-45-67</p>
+                <p>info@sibavto.ru</p>
+            </div>
+        </div>
+        <div class="footer__bottom">
+            <p>2026 SibAvto. Все права защищены.</p>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+    <script src="js/profile.js"></script>
+    <script src="js/chat-bot.js"></script>
+</body>
+</html>

@@ -9,14 +9,14 @@
 <body class="auth__body">
     <div class="auth">
         <div class="auth__card">
-            <a href="index.html" class="auth__logo">SibAvto</a>
+            <a href="index.html" class="auth__logo">Sib<span>Avto</span></a>
             <h1 class="auth__title">Регистрация</h1>
-            <form class="auth__form">
-                <input type="text" placeholder="ФИО" required>
-                <input type="tel" placeholder="Телефон" required>
-                <input type="email" placeholder="E-mail" required>
-                <input type="password" placeholder="Пароль" required>
-                <input type="password" placeholder="Повтор пароля" required>
+            <form class="auth__form" id="registerForm">
+                <input type="text" id="regFullName" placeholder="ФИО" required>
+                <input type="tel" id="regPhone" placeholder="Телефон" required>
+                <input type="email" id="regEmail" placeholder="E-mail" required>
+                <input type="password" id="regPassword" placeholder="Пароль" required minlength="6">
+                <input type="password" id="regPassword2" placeholder="Повтор пароля" required>
                 <button type="submit" class="btn btn--primary btn--full">Зарегистрироваться</button>
             </form>
             <p class="auth__link">
@@ -24,5 +24,7 @@
             </p>
         </div>
     </div>
+    <script src="js/main.js"></script>
+    <script src="js/chat-bot.js"></script>
 </body>
 </html>

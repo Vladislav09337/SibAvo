@@ -9,12 +9,14 @@
 <body>
     <header class="header">
         <div class="container header__inner">
-            <a href="index.html" class="logo"><span class="logo__text">SibAvto</span></a>
+            <a href="index.html" class="logo"><span class="logo__text">Sib<span>Avto</span></span></a>
             <nav class="nav">
                 <a href="index.html" class="nav__link">Главная</a>
                 <a href="catalog.html" class="nav__link">Каталог</a>
                 <a href="about.html" class="nav__link">О компании</a>
                 <a href="contacts.html" class="nav__link">Контакты</a>
+                <a href="employees.html" class="nav__link">Сотрудники</a>
+                <a href="integrations.html" class="nav__link">Интеграции</a>
             </nav>
             <div class="header__actions">
                 <a href="cart.html" class="header__icon">Корзина</a>
@@ -26,46 +28,13 @@
     <main class="cart">
         <div class="container">
             <h1 class="page__title">Корзина</h1>
-
             <div class="cart__layout">
-                <div class="cart__items">
-                    <div class="cart__item">
-                        <div class="cart__image"></div>
-                        <div class="cart__info">
-                            <h3>Тормозные колодки Bosch</h3>
-                            <p>Артикул: BOS-0986AB1234</p>
-                            <p class="cart__price">3 500 руб.</p>
-                        </div>
-                        <div class="cart__qty">
-                            <button>−</button>
-                            <input type="text" value="2">
-                            <button>+</button>
-                        </div>
-                        <div class="cart__total">7 000 руб.</div>
-                        <button class="cart__remove">Удалить</button>
-                    </div>
-                    <div class="cart__item">
-                        <div class="cart__image"></div>
-                        <div class="cart__info">
-                            <h3>Свечи зажигания Denso</h3>
-                            <p>Артикул: DEN-90919-01253</p>
-                            <p class="cart__price">1 200 руб.</p>
-                        </div>
-                        <div class="cart__qty">
-                            <button>−</button>
-                            <input type="text" value="1">
-                            <button>+</button>
-                        </div>
-                        <div class="cart__total">1 200 руб.</div>
-                        <button class="cart__remove">Удалить</button>
-                    </div>
-                </div>
-
+                <div class="cart__items"></div>
                 <aside class="cart__summary">
                     <h2>Итого</h2>
                     <div class="cart__row">
-                        <span>Товары (3 шт.)</span>
-                        <span>8 200 руб.</span>
+                        <span>Товары (0 шт.)</span>
+                        <span>0 руб.</span>
                     </div>
                     <div class="cart__row">
                         <span>Доставка</span>
@@ -73,7 +42,7 @@
                     </div>
                     <div class="cart__row cart__row--total">
                         <span>Итого к оплате</span>
-                        <span>8 200 руб.</span>
+                        <span>0 руб.</span>
                     </div>
                     <a href="checkout.html" class="btn btn--primary btn--full">Оформить заказ</a>
                 </aside>
@@ -103,5 +72,8 @@
             <p>2026 SibAvto. Все права защищены.</p>
         </div>
     </footer>
+
+    <script src="js/main.js"></script>
+    <script src="js/chat-bot.js"></script>
 </body>
 </html>

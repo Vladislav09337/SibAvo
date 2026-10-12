@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Сотрудники — SibAvto</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header class="header">
+        <div class="container header__inner">
+            <a href="index.html" class="logo"><span class="logo__text">Sib<span>Avto</span></span></a>
+            <nav class="nav">
+                <a href="index.html" class="nav__link">Главная</a>
+                <a href="catalog.html" class="nav__link">Каталог</a>
+                <a href="about.html" class="nav__link">О компании</a>
+                <a href="contacts.html" class="nav__link">Контакты</a>
+                <a href="employees.html" class="nav__link">Сотрудники</a>
+                <a href="integrations.html" class="nav__link">Интеграции</a>
+            </nav>
+            <div class="header__actions">
+                <a href="profile.html#favorites" class="header__icon header__favorites">Избранное</a>
+                <a href="cart.html" class="header__icon">Корзина</a>
+                <a href="login.html" class="btn btn--outline">Войти</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="employees">
+        <div class="container">
+            <h1 class="page__title">Наши сотрудники</h1>
+            <p class="employees__subtitle">Профессиональная команда SibAvto всегда готова помочь вам с выбором автозапчастей</p>
+
+            <div class="employees__filters">
+                <input type="text" id="employeeSearch" placeholder="Поиск по имени или должности...">
+                <select id="departmentFilter">
+                    <option value="all">Все отделы</option>
+                </select>
+            </div>
+
+            <div class="employees__grid" id="employeesGrid"></div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer__inner">
+            <div class="footer__col">
+                <h4>SibAvto</h4>
+                <p>Лицензированный продавец автозапчастей</p>
+                <p>Лицензия № 54-АА-123456 от 01.01.2020</p>
+            </div>
+            <div class="footer__col">
+                <h4>Разделы</h4>
+                <a href="catalog.html">Каталог</a>
+                <a href="employees.html">Сотрудники</a>
+                <a href="about.html">О компании</a>
+                <a href="contacts.html">Контакты</a>
+            </div>
+            <div class="footer__col">
+                <h4>Контакты</h4>
+                <p>+7 (383) 123-45-67</p>
+                <p>info@sibavto.ru</p>
+                <p>г. Новосибирск, ул. Автозаводская, 15</p>
+            </div>
+        </div>
+        <div class="footer__bottom">
+            <p>2026 SibAvto. Все права защищены.</p>
+        </div>
+    </footer>
+
+    <script src="data/employees.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/employees.js"></script>
+    <script src="js/chat-bot.js"></script>
+</body>
+</html>

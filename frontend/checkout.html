@@ -9,14 +9,17 @@
 <body>
     <header class="header">
         <div class="container header__inner">
-            <a href="index.html" class="logo"><span class="logo__text">SibAvto</span></a>
+            <a href="index.html" class="logo"><span class="logo__text">Sib<span>Avto</span></span></a>
             <nav class="nav">
                 <a href="index.html" class="nav__link">Главная</a>
                 <a href="catalog.html" class="nav__link">Каталог</a>
                 <a href="about.html" class="nav__link">О компании</a>
                 <a href="contacts.html" class="nav__link">Контакты</a>
+                <a href="employees.html" class="nav__link">Сотрудники</a>
+                <a href="integrations.html" class="nav__link">Интеграции</a>
             </nav>
             <div class="header__actions">
+                <a href="profile.html#favorites" class="header__icon header__favorites">Избранное</a>
                 <a href="cart.html" class="header__icon">Корзина</a>
                 <a href="login.html" class="btn btn--outline">Войти</a>
             </div>
@@ -26,15 +29,14 @@
     <main class="checkout">
         <div class="container">
             <h1 class="page__title">Оформление заказа</h1>
-
-            <form class="checkout__form">
+            <form class="checkout__form" id="checkoutForm">
                 <section class="checkout__section">
                     <h2>Контактные данные</h2>
                     <div class="form__row">
-                        <input type="text" placeholder="ФИО" required>
-                        <input type="tel" placeholder="Телефон" required>
+                        <input type="text" id="customerName" placeholder="ФИО" required>
+                        <input type="tel" id="customerPhone" placeholder="Телефон" required>
                     </div>
-                    <input type="email" placeholder="E-mail" required>
+                    <input type="email" id="customerEmail" placeholder="E-mail" required>
                 </section>
 
                 <section class="checkout__section">
@@ -47,7 +49,22 @@
                         <input type="radio" name="delivery" value="courier">
                         <span>Курьерская доставка</span>
                     </label>
-                    <input type="text" placeholder="Адрес доставки" class="checkout__address">
+
+                    <div id="addressBlock" style="display: none; margin-top: 16px;">
+                        <h3 style="font-size: 16px; margin-bottom: 12px; color: #1a2332;">Выберите адрес доставки</h3>
+                        <div id="savedAddressesList"></div>
+                        <div style="margin-top: 12px;">
+                            <a href="profile.html#addresses" class="btn btn--outline btn--small" style="color: #1a2332; border-color: #1a2332;">
+                                + Добавить новый адрес
+                            </a>
+                        </div>
+                        <div style="margin-top: 16px;">
+                            <label style="display: block; font-size: 14px; color: #555; margin-bottom: 6px;">
+                                Или введите адрес вручную:
+                            </label>
+                            <input type="text" id="manualAddress" placeholder="Город, улица, дом, квартира">
+                        </div>
+                    </div>
                 </section>
 
                 <section class="checkout__section">
@@ -67,8 +84,8 @@
                 </section>
 
                 <section class="checkout__section">
-                    <h2>Комментарий к заказу</h2>
-                    <textarea placeholder="Комментарий (необязательно)"></textarea>
+                    <h2>Комментарий</h2>
+                    <textarea id="orderComment" placeholder="Комментарий к заказу (необязательно)"></textarea>
                 </section>
 
                 <button type="submit" class="btn btn--primary btn--large btn--full">Подтвердить заказ</button>
@@ -85,6 +102,7 @@
             <div class="footer__col">
                 <h4>Разделы</h4>
                 <a href="catalog.html">Каталог</a>
+                <a href="employees.html">Сотрудники</a>
                 <a href="about.html">О компании</a>
                 <a href="contacts.html">Контакты</a>
             </div>
@@ -98,5 +116,137 @@
             <p>2026 SibAvto. Все права защищены.</p>
         </div>
     </footer>
+
+    <script src="js/main.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const currentUser = JSON.parse(localStorage.getItem('sibavto_current_user') || 'null');
+
+        // ============ АВТОЗАПОЛНЕНИЕ КОНТАКТОВ ============
+        if (currentUser) {
+            document.getElementById('customerName').value = currentUser.fullName || '';
+            document.getElementById('customerPhone').value = currentUser.phone || '';
+            document.getElementById('customerEmail').value = currentUser.email || '';
+        }
+
+        // ============ ПОКАЗ АДРЕСОВ ПРИ ВЫБОРЕ "КУРЬЕР" ============
+        const addressBlock = document.getElementById('addressBlock');
+        const savedAddressesList = document.getElementById('savedAddressesList');
+
+        document.querySelectorAll('input[name="delivery"]').forEach(radio => {
+            radio.addEventListener('change', function () {
+                addressBlock.style.display = this.value === 'courier' ? 'block' : 'none';
+                if (this.value === 'courier') renderSavedAddresses();
+            });
+        });
+
+        // ============ ОТРИСОВКА СОХРАНЁННЫХ АДРЕСОВ ============
+        function renderSavedAddresses() {
+            if (!currentUser) {
+                savedAddressesList.innerHTML = '<p style="color: #888; font-size: 14px;">Войдите в аккаунт, чтобы использовать сохранённые адреса</p>';
+                return;
+            }
+
+            const addresses = JSON.parse(localStorage.getItem('sibavto_addresses_' + currentUser.id) || '[]');
+
+            if (addresses.length === 0) {
+                savedAddressesList.innerHTML = '<p style="color: #888; font-size: 14px;">У вас нет сохранённых адресов</p>';
+                return;
+            }
+
+            savedAddressesList.innerHTML = addresses.map((addr, i) => `
+                <label class="address__option">
+                    <input type="radio" name="savedAddress" value="${i}">
+                    <div>
+                        <strong>${addr.label}</strong>
+                        <p>${addr.fullAddress}</p>
+                        ${addr.comment ? `<p style="font-size: 12px; color: #888;">${addr.comment}</p>` : ''}
+                    </div>
+                </label>
+            `).join('');
+        }
+
+        // ============ ВЫБОР АДРЕСА ИЗ ПРОФИЛЯ (если есть) ============
+        const selectedAddress = JSON.parse(localStorage.getItem('sibavto_selected_address') || 'null');
+        if (selectedAddress) {
+            document.querySelector('input[name="delivery"][value="courier"]').checked = true;
+            addressBlock.style.display = 'block';
+            renderSavedAddresses();
+
+            setTimeout(() => {
+                const manual = document.getElementById('manualAddress');
+                if (manual) manual.value = selectedAddress.fullAddress;
+                localStorage.removeItem('sibavto_selected_address');
+            }, 100);
+        }
+
+        // ============ ОТПРАВКА ЗАКАЗА ============
+        document.getElementById('checkoutForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const cart = JSON.parse(localStorage.getItem('sibavto_cart') || '[]');
+            if (cart.length === 0) {
+                showToast('Корзина пуста', 'error');
+                return;
+            }
+
+            const delivery = document.querySelector('input[name="delivery"]:checked').value;
+            const payment = document.querySelector('input[name="payment"]:checked').value;
+            const comment = document.getElementById('orderComment').value.trim();
+
+            // Определяем адрес
+            let address = null;
+            if (delivery === 'courier') {
+                const selectedSaved = document.querySelector('input[name="savedAddress"]:checked');
+                const manual = document.getElementById('manualAddress').value.trim();
+
+                if (selectedSaved && currentUser) {
+                    const addresses = JSON.parse(localStorage.getItem('sibavto_addresses_' + currentUser.id) || '[]');
+                    address = addresses[parseInt(selectedSaved.value)].fullAddress;
+                } else if (manual) {
+                    address = manual;
+                } else {
+                    showToast('Выберите или введите адрес доставки', 'error');
+                    return;
+                }
+            }
+
+            const orderNumber = '2026-' + Math.floor(1000 + Math.random() * 9000);
+            const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+
+            const order = {
+                number: orderNumber,
+                items: cart,
+                total: total,
+                status: 'new',
+                deliveryMethod: delivery,
+                address: address,
+                paymentMethod: payment,
+                comment: comment,
+                createdAt: new Date().toISOString()
+            };
+
+            if (currentUser) {
+                const ordersKey = 'sibavto_orders_' + currentUser.id;
+                const orders = JSON.parse(localStorage.getItem(ordersKey) || '[]');
+                orders.unshift(order);
+                localStorage.setItem(ordersKey, JSON.stringify(orders));
+            }
+
+            localStorage.removeItem('sibavto_cart');
+
+            showToast('Заказ №' + orderNumber + ' оформлен!', 'success');
+
+            setTimeout(() => {
+                if (currentUser) {
+                    window.location.href = 'profile.html';
+                } else {
+                    window.location.href = 'index.html';
+                }
+            }, 2000);
+        });
+    });
+    </script>
+    <script src="js/chat-bot.js"></script>
 </body>
 </html>

@@ -20,7 +20,6 @@ async function connectDB() {
         console.error('DB connection error:');
         console.error('Message:', err.message);
         console.error('Code:', err.code);
-        console.error('Original:', err.originalError);
         throw err;
     }
 }

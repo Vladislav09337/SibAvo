@@ -9,11 +9,11 @@
 <body class="auth__body">
     <div class="auth">
         <div class="auth__card">
-            <a href="index.html" class="auth__logo">SibAvto</a>
+            <a href="index.html" class="auth__logo">Sib<span>Avto</span></a>
             <h1 class="auth__title">Вход в личный кабинет</h1>
-            <form class="auth__form">
-                <input type="tel" placeholder="Телефон" required>
-                <input type="password" placeholder="Пароль" required>
+            <form class="auth__form" id="loginForm">
+                <input type="tel" id="loginPhone" placeholder="Телефон" required>
+                <input type="password" id="loginPassword" placeholder="Пароль" required>
                 <button type="submit" class="btn btn--primary btn--full">Войти</button>
             </form>
             <p class="auth__link">
@@ -21,5 +21,7 @@
             </p>
         </div>
     </div>
+    <script src="js/main.js"></script>
+    <script src="js/chat-bot.js"></script>
 </body>
 </html>
