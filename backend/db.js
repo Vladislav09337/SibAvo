@@ -1,26 +1,31 @@
-const sql = require('mssql/msnodesqlv8');
+const sql = require('mssql');
 require('dotenv').config();
 
-const server = process.env.DB_SERVER || 'localhost\\SQLEXPRESS';
-const database = process.env.DB_DATABASE || 'SibAvto';
-
 const config = {
-    connectionString: `Driver={ODBC Driver 17 for SQL Server};Server=${server};Database=${database};Trusted_Connection=yes;TrustServerCertificate=yes;Encrypt=no;`
+    server: process.env.DB_SERVER || 'host.docker.internal',
+    database: process.env.DB_DATABASE || 'SibAvto',
+    user: process.env.DB_USER || 'sa',
+    password: process.env.DB_PASSWORD || '',
+    port: parseInt(process.env.DB_PORT) || 1433,
+    options: {
+        encrypt: false,
+        trustServerCertificate: true,
+        enableArithAbort: true
+    }
 };
 
 let pool;
 
 async function connectDB() {
     try {
-        console.log('Connecting to:', server, '/', database);
+        console.log('Connecting to:', config.server, '/', config.database);
         pool = await sql.connect(config);
         console.log('Connected to SQL Server successfully');
         return pool;
     } catch (err) {
-        console.error('DB connection error:');
-        console.error('Message:', err.message);
-        console.error('Code:', err.code);
-        throw err;
+        console.error('DB connection error:', err.message);
+        // НЕ падаем — сервер продолжит работу
+        return null;
     }
 }
 
