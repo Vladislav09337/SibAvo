@@ -2167,3 +2167,829 @@ a { text-decoration: none; color: inherit; }
         padding: 8px;
     }
 }
+/* ============ ХЛЕБНЫЕ КРОШКИ ============ */
+.breadcrumbs {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+    padding: 20px 0;
+    font-size: 14px;
+    color: #888;
+}
+
+.breadcrumb__link {
+    color: #666;
+    transition: color 0.2s;
+}
+
+.breadcrumb__link:hover {
+    color: #e63946;
+}
+
+.breadcrumb__sep {
+    color: #ccc;
+}
+
+.breadcrumb__current {
+    color: #1a2332;
+    font-weight: 600;
+}
+
+/* ============ ССЫЛКА НА ТОВАР В КАРТОЧКЕ ============ */
+.product__link {
+    display: block;
+    color: inherit;
+    text-decoration: none;
+}
+
+.product__link:hover .product__name {
+    color: #e63946;
+}
+
+/* ============ СТРАНИЦА ТОВАРА ============ */
+.product-page {
+    padding: 0 0 80px;
+}
+
+.product__detail {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+    background: #fff;
+    border-radius: 12px;
+    padding: 40px;
+    margin-bottom: 48px;
+}
+
+/* Галерея */
+.product__gallery {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.product__main-image {
+    width: 100%;
+    aspect-ratio: 1;
+    background: #f5f5f5;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.product__image-placeholder {
+    font-size: 120px;
+    color: #c5cdd8;
+}
+
+.product__thumbnails {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+}
+
+.product__thumb {
+    aspect-ratio: 1;
+    background: #f5f5f5;
+    border-radius: 8px;
+    border: 2px solid transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 40px;
+    color: #c5cdd8;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.product__thumb:hover,
+.product__thumb--active {
+    border-color: #e63946;
+}
+
+/* Информация */
+.product__info {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.product__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.product__brand {
+    display: inline-block;
+    padding: 4px 12px;
+    background: #e63946;
+    color: #fff;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.product__header .favorite-btn {
+    position: static;
+    width: 44px;
+    height: 44px;
+    font-size: 24px;
+}
+
+.product__title {
+    font-size: 28px;
+    font-weight: 700;
+    color: #1a2332;
+    line-height: 1.3;
+}
+
+.product__meta {
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+    font-size: 14px;
+    color: #666;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #eee;
+}
+
+.product__meta strong {
+    color: #1a2332;
+}
+
+/* Цена */
+.product__price-block {
+    padding: 16px 0;
+}
+
+.product__price-detail {
+    font-size: 36px;
+    font-weight: 700;
+    color: #e63946;
+    margin-bottom: 4px;
+}
+
+.product__price-note {
+    font-size: 13px;
+    color: #888;
+}
+
+/* Наличие */
+.product__status-detail {
+    padding: 14px 20px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 15px;
+}
+
+.product__status-detail--in {
+    background: #d4edda;
+    color: #155724;
+}
+
+.product__status-detail--order {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.product__status-detail strong {
+    font-weight: 700;
+}
+
+.product__status-detail span {
+    opacity: 0.8;
+}
+
+/* Кнопки */
+.product__actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.product__actions .btn {
+    flex: 1;
+    min-width: 180px;
+}
+
+/* Характеристики */
+.product__features {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    padding: 20px;
+    background: #f9f9f9;
+    border-radius: 8px;
+}
+
+.product__feature-title {
+    font-size: 12px;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+}
+
+.product__feature-value {
+    font-size: 15px;
+    font-weight: 600;
+    color: #1a2332;
+}
+
+/* Описание */
+.product__description {
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+}
+
+.product__description h3 {
+    font-size: 18px;
+    margin-bottom: 12px;
+    color: #1a2332;
+}
+
+.product__description p {
+    font-size: 15px;
+    color: #555;
+    line-height: 1.6;
+    margin-bottom: 12px;
+}
+
+.product__description ul {
+    padding-left: 20px;
+    margin-bottom: 12px;
+}
+
+.product__description li {
+    font-size: 15px;
+    color: #555;
+    margin-bottom: 6px;
+}
+
+/* Похожие / Недавно */
+.product__similar,
+.product__recent {
+    margin-bottom: 48px;
+}
+
+.product__similar .section__title,
+.product__recent .section__title {
+    text-align: left;
+    margin-bottom: 24px;
+}
+
+/* Адаптивность */
+@media (max-width: 900px) {
+    .product__detail {
+        grid-template-columns: 1fr;
+        gap: 32px;
+        padding: 24px;
+    }
+
+    .product__title {
+        font-size: 22px;
+    }
+
+    .product__price-detail {
+        font-size: 28px;
+    }
+
+    .product__features {
+        grid-template-columns: 1fr;
+    }
+
+    .product__actions .btn {
+        min-width: 100%;
+    }
+}
+
+/* ============ ИНФО-СТРАНИЦЫ (Доставка, Гарантия, FAQ) ============ */
+.info__section {
+    background: #fff;
+    border-radius: 8px;
+    padding: 32px;
+    margin-bottom: 24px;
+}
+
+.info__section h2 {
+    font-size: 22px;
+    margin-bottom: 20px;
+    color: #1a2332;
+}
+
+.info__section p {
+    font-size: 15px;
+    color: #555;
+    line-height: 1.6;
+    margin-bottom: 12px;
+}
+
+.info__section a {
+    color: #e63946;
+    font-weight: 600;
+}
+
+.info__list {
+    padding-left: 24px;
+    margin-bottom: 16px;
+}
+
+.info__list li {
+    font-size: 15px;
+    color: #555;
+    margin-bottom: 8px;
+    line-height: 1.5;
+}
+
+.info__note {
+    background: #fff3cd;
+    padding: 12px 16px;
+    border-radius: 6px;
+    border-left: 4px solid #ffc107;
+    margin-top: 12px;
+    font-size: 14px;
+    color: #856404;
+}
+
+/* ============ ДОСТАВКА ============ */
+.delivery__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.delivery__card {
+    background: #f9f9f9;
+    border-radius: 8px;
+    padding: 24px;
+    border: 2px solid transparent;
+    transition: all 0.2s;
+}
+
+.delivery__card:hover {
+    border-color: #e63946;
+    background: #fff;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    transform: translateY(-4px);
+}
+
+.delivery__card h3 {
+    font-size: 17px;
+    color: #1a2332;
+    margin-bottom: 10px;
+}
+
+.delivery__price {
+    font-size: 22px;
+    font-weight: 700;
+    color: #e63946;
+    margin-bottom: 12px;
+}
+
+.delivery__time {
+    font-size: 14px;
+    color: #1a2332;
+    font-weight: 600;
+    margin-top: 10px;
+}
+
+.delivery__note {
+    font-size: 13px;
+    color: #888;
+    margin-top: 6px;
+}
+
+/* Таблица доставки */
+.delivery__table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 16px;
+}
+
+.delivery__table th {
+    text-align: left;
+    padding: 12px 16px;
+    background: #f5f5f5;
+    font-size: 13px;
+    color: #888;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.delivery__table td {
+    padding: 14px 16px;
+    border-bottom: 1px solid #eee;
+    font-size: 14px;
+    color: #333;
+}
+
+.delivery__table tr:last-child td {
+    border-bottom: none;
+}
+
+/* Оплата */
+.payment__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.payment__card {
+    background: #f9f9f9;
+    border-radius: 8px;
+    padding: 24px;
+    border-left: 4px solid #e63946;
+}
+
+.payment__card h3 {
+    font-size: 16px;
+    color: #1a2332;
+    margin-bottom: 8px;
+}
+
+.payment__card p {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 6px;
+}
+
+.payment__note {
+    font-size: 13px;
+    color: #888;
+    font-style: italic;
+    margin-top: 8px !important;
+}
+
+/* Шаги */
+.steps__list {
+    padding-left: 24px;
+    counter-reset: step;
+    list-style: none;
+}
+
+.steps__list li {
+    position: relative;
+    padding-left: 44px;
+    margin-bottom: 16px;
+    font-size: 15px;
+    color: #555;
+    line-height: 1.5;
+    counter-increment: step;
+}
+
+.steps__list li::before {
+    content: counter(step);
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 30px;
+    height: 30px;
+    background: #e63946;
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 14px;
+}
+
+.steps__list strong {
+    color: #1a2332;
+}
+
+/* ============ ГАРАНТИЯ ============ */
+.warranty__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 20px;
+    margin-top: 24px;
+}
+
+.warranty__card {
+    background: #f9f9f9;
+    border-radius: 8px;
+    padding: 24px;
+    text-align: center;
+    border: 2px solid transparent;
+    transition: all 0.2s;
+}
+
+.warranty__card:hover {
+    border-color: #e63946;
+    background: #fff;
+}
+
+.warranty__icon {
+    font-size: 36px;
+    font-weight: 700;
+    color: #e63946;
+    margin-bottom: 8px;
+}
+
+.warranty__card h3 {
+    font-size: 17px;
+    color: #1a2332;
+    margin-bottom: 8px;
+}
+
+.warranty__card p {
+    font-size: 13px;
+    color: #888;
+    margin: 0;
+}
+
+/* ============ FAQ ============ */
+.faq__subtitle {
+    text-align: center;
+    color: #666;
+    font-size: 15px;
+    margin-bottom: 32px;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.faq__categories {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 32px;
+    justify-content: center;
+}
+
+.faq__category {
+    padding: 10px 20px;
+    background: #fff;
+    border: 2px solid #e0e0e0;
+    border-radius: 24px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #555;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+}
+
+.faq__category:hover {
+    border-color: #e63946;
+    color: #e63946;
+}
+
+.faq__category--active {
+    background: #e63946;
+    border-color: #e63946;
+    color: #fff;
+}
+
+.faq__list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 40px;
+}
+
+.faq__item {
+    background: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid #e0e0e0;
+    transition: all 0.2s;
+}
+
+.faq__item:hover {
+    border-color: #e63946;
+}
+
+.faq__question {
+    width: 100%;
+    padding: 20px 24px;
+    background: none;
+    border: none;
+    text-align: left;
+    font-size: 16px;
+    font-weight: 600;
+    color: #1a2332;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    font-family: inherit;
+    transition: all 0.2s;
+}
+
+.faq__question:hover {
+    background: #fafafa;
+}
+
+.faq__icon {
+    font-size: 24px;
+    color: #e63946;
+    transition: transform 0.3s;
+    font-weight: 300;
+    flex-shrink: 0;
+}
+
+.faq__item--open .faq__icon {
+    transform: rotate(45deg);
+}
+
+.faq__answer {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out, padding 0.3s ease-out;
+    padding: 0 24px;
+}
+
+.faq__item--open .faq__answer {
+    max-height: 600px;
+    padding: 0 24px 20px;
+}
+
+.faq__answer p {
+    font-size: 15px;
+    color: #555;
+    line-height: 1.6;
+    margin-bottom: 10px;
+}
+
+.faq__answer p:last-child {
+    margin-bottom: 0;
+}
+
+.faq__contact {
+    text-align: center;
+    background: #fff;
+    border-radius: 8px;
+    padding: 40px 24px;
+}
+
+.faq__contact h2 {
+    font-size: 22px;
+    margin-bottom: 16px;
+    color: #1a2332;
+}
+
+.faq__contact p {
+    font-size: 15px;
+    color: #555;
+    margin-bottom: 8px;
+}
+
+/* Адаптив */
+@media (max-width: 600px) {
+    .delivery__grid,
+    .payment__grid,
+    .warranty__grid {
+        grid-template-columns: 1fr;
+    }
+
+    .delivery__table {
+        font-size: 12px;
+    }
+
+    .delivery__table th,
+    .delivery__table td {
+        padding: 8px;
+    }
+
+    .faq__question {
+        font-size: 15px;
+        padding: 16px 20px;
+    }
+
+    .faq__answer {
+        padding: 0 20px;
+    }
+
+    .faq__item--open .faq__answer {
+        padding: 0 20px 16px;
+    }
+}
+/* ============ ВЫПАДАЮЩЕЕ МЕНЮ ПРОФИЛЯ ============ */
+.user-menu {
+    position: relative;
+}
+
+.user-menu__btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: transparent;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    color: #fff;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.user-menu__btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: #e63946;
+}
+
+.user-menu__avatar {
+    font-size: 18px;
+}
+
+.user-menu__arrow {
+    font-size: 10px;
+    transition: transform 0.2s;
+}
+
+.user-menu--open .user-menu__arrow {
+    transform: rotate(180deg);
+}
+
+.user-menu__dropdown {
+    position: absolute;
+    top: calc(100% + 12px);
+    right: 0;
+    min-width: 240px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+    padding: 8px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all 0.2s;
+    z-index: 1000;
+}
+
+.user-menu--open .user-menu__dropdown {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.user-menu__item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    border-radius: 8px;
+    color: #1a2332;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.2s;
+    position: relative;
+}
+
+.user-menu__item:hover {
+    background: #f5f5f5;
+    color: #e63946;
+}
+
+.user-menu__item span:first-child {
+    font-size: 18px;
+    width: 24px;
+    text-align: center;
+}
+
+.user-menu__badge {
+    margin-left: auto;
+    min-width: 22px;
+    height: 22px;
+    padding: 0 6px;
+    background: #e63946;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    border-radius: 11px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.user-menu__badge:empty,
+.user-menu__badge[data-empty="true"] {
+    display: none;
+}
+
+.user-menu__divider {
+    height: 1px;
+    background: #eee;
+    margin: 8px 0;
+}
+
+.user-menu__item--login {
+    color: #e63946;
+    font-weight: 600;
+}

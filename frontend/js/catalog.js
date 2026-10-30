@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     if (!productsGrid) return;
 
-    // ============ ИЗБРАННОЕ (вспомогательные функции) ============
+    // ============ ИЗБРАННОЕ ============
     function getFavorites() {
         const user = JSON.parse(localStorage.getItem('sibavto_current_user') || 'null');
         if (!user) return [];
@@ -47,8 +47,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         localStorage.setItem('sibavto_favorites_' + user.id, JSON.stringify(favorites));
 
-        // Обновляем кнопку на карточке
-        const card = document.querySelector(`.product__card[data-article="${product.article}"]`);
+        const card = document.querySelector('.product__card[data-article="' + product.article + '"]');
         if (card) {
             const btn = card.querySelector('.favorite-btn');
             if (btn) {
@@ -58,7 +57,6 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         }
 
-        // Обновляем счётчик в шапке
         updateFavoritesHeaderCount();
     }
 
@@ -72,13 +70,18 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // ============ ПОЛУЧИТЬ ФИЛЬТРЫ ============
     function getFilters() {
+        const carEl = document.querySelector('select[data-filter="car"]');
+        const priceMinEl = document.querySelector('input[data-filter="price-min"]');
+        const priceMaxEl = document.querySelector('input[data-filter="price-max"]');
+        const sortEl = document.querySelector('.catalog__sort');
+
         const filters = {
-            car: document.querySelector('select[data-filter="car"]')?.value || 'all',
+            car: carEl ? carEl.value : 'all',
             category: [],
             status: [],
-            priceMin: parseInt(document.querySelector('input[data-filter="price-min"]')?.value || 0),
-            priceMax: parseInt(document.querySelector('input[data-filter="price-max"]')?.value || 999999),
-            sort: document.querySelector('.catalog__sort')?.value || 'popular',
+            priceMin: parseInt(priceMinEl ? priceMinEl.value : 0) || 0,
+            priceMax: parseInt(priceMaxEl ? priceMaxEl.value : 999999) || 999999,
+            sort: sortEl ? sortEl.value : 'popular',
             brand: brandFilter || ''
         };
 
@@ -114,10 +117,14 @@ document.addEventListener('DOMContentLoaded', function () {
     function sortProducts(products, sort) {
         const sorted = [...products];
         switch (sort) {
-            case 'price-asc': return sorted.sort((a, b) => a.price - b.price);
-            case 'price-desc': return sorted.sort((a, b) => b.price - a.price);
-            case 'name': return sorted.sort((a, b) => a.name.localeCompare(b.name));
-            default: return sorted;
+            case 'price-asc':
+                return sorted.sort((a, b) => a.price - b.price);
+            case 'price-desc':
+                return sorted.sort((a, b) => b.price - a.price);
+            case 'name':
+                return sorted.sort((a, b) => a.name.localeCompare(b.name));
+            default:
+                return sorted;
         }
     }
 
@@ -151,9 +158,11 @@ document.addEventListener('DOMContentLoaded', function () {
                             title="${fav ? 'Удалить из избранного' : 'Добавить в избранное'}">
                         ${favIcon}
                     </button>
-                    <div class="product__image">■</div>
-                    <h3 class="product__name">${p.name}</h3>
-                    <p class="product__article">Артикул: ${p.article}</p>
+                    <a href="product.html?id=${p.id}" class="product__link">
+                        <div class="product__image">■</div>
+                        <h3 class="product__name">${p.name}</h3>
+                        <p class="product__article">Артикул: ${p.article}</p>
+                    </a>
                     <p class="product__price">${p.price.toLocaleString('ru-RU')} руб.</p>
                     <span class="product__status product__status--${p.status === 'in_stock' ? 'in' : 'order'}">
                         ${p.status === 'in_stock' ? 'В наличии' : 'Под заказ'}
@@ -167,15 +176,17 @@ document.addEventListener('DOMContentLoaded', function () {
             catalogCount.textContent = 'Найдено: ' + products.length + ' товаров';
         }
 
-        // ============ ОБРАБОТЧИКИ: "В корзину" ============
+        // Обработчики: "В корзину"
         productsGrid.querySelectorAll('.add-to-cart').forEach(btn => {
-            btn.addEventListener('click', function () {
+            btn.addEventListener('click', function (e) {
+                e.preventDefault();
+                e.stopPropagation();
                 const id = parseInt(this.dataset.id);
                 addToCartById(id);
             });
         });
 
-        // ============ ОБРАБОТЧИКИ: "Избранное" ============
+        // Обработчики: "Избранное"
         productsGrid.querySelectorAll('.favorite-btn').forEach(btn => {
             btn.addEventListener('click', function (e) {
                 e.preventDefault();
@@ -196,7 +207,7 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         });
 
-        // ============ ПРОКРУТКА И ПОДСВЕТКА ============
+        // Подсветка
         if (highlightArticle) {
             setTimeout(() => {
                 const targetCard = productsGrid.querySelector('.product__card--highlight');
@@ -223,20 +234,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
                         const allProducts = sortProducts(window.SIBAVTO_PRODUCTS, 'popular');
                         renderProducts(allProducts);
-
-                        setTimeout(() => {
-                            const card = productsGrid.querySelector('.product__card--highlight');
-                            if (card) {
-                                card.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                                if (typeof showToast === 'function') {
-                                    showToast('Найден товар: ' + highlightArticle, 'success');
-                                }
-                            }
-                        }, 200);
-                    } else {
-                        if (typeof showToast === 'function') {
-                            showToast('Товар с артикулом ' + highlightArticle + ' не найден', 'error');
-                        }
                     }
                 }
             }, 200);

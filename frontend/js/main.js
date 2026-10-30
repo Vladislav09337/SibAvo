@@ -379,4 +379,19 @@ document.addEventListener('DOMContentLoaded', function () {
             setTimeout(() => window.location.href = 'profile.html', 800);
         });
     }
-});
+        // ============ ВЫПАДАЮЩЕЕ МЕНЮ ПРОФИЛЯ ============
+    const userMenuBtn = document.getElementById('userMenuBtn');
+    const userMenu = document.querySelector('.user-menu');
+
+    if (userMenuBtn) {
+        userMenuBtn.addEventListener('click', function (e) {
+            e.stopPropagation();
+            userMenu.classList.toggle('user-menu--open');
+        });
+
+        document.addEventListener('click', function () {
+            userMenu.classList.remove('user-menu--open');
+        });
+    }
+
+});   
