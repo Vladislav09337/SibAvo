@@ -1,39 +1,26 @@
-const sql = require('mssql');
+const { Pool } = require('pg');
 require('dotenv').config();
 
-const config = {
-    server: process.env.DB_SERVER || 'host.docker.internal',
-    database: process.env.DB_DATABASE || 'SibAvto',
-    user: process.env.DB_USER || 'sa',
-    password: process.env.DB_PASSWORD || '',
-    port: parseInt(process.env.DB_PORT) || 1433,
-    options: {
-        encrypt: false,
-        trustServerCertificate: true,
-        enableArithAbort: true
-    }
-};
-
-let pool;
+const pool = new Pool({
+    connectionString: process.env.DATABASE_URL,
+    ssl: { rejectUnauthorized: false } // ОБЯЗАТЕЛЬНО для Supabase
+});
 
 async function connectDB() {
     try {
-        console.log('Connecting to:', config.server, '/', config.database);
-        pool = await sql.connect(config);
-        console.log('Connected to SQL Server successfully');
+        const client = await pool.connect();
+        console.log('✅ Connected to Supabase PostgreSQL');
+        client.release();
         return pool;
     } catch (err) {
-        console.error('DB connection error:', err.message);
-        // НЕ падаем — сервер продолжит работу
+        console.error('❌ DB connection error:', err.message);
         return null;
     }
 }
 
 function getPool() {
-    if (!pool) {
-        throw new Error('Database not connected');
-    }
+    if (!pool) throw new Error('Database not connected');
     return pool;
 }
 
-module.exports = { connectDB, getPool, sql };
+module.exports = { connectDB, getPool };

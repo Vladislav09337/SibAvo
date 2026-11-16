@@ -11,20 +11,7 @@ document.addEventListener('DOMContentLoaded', function () {
         return;
     }
 
-    // ============ ЗАПОЛНЕНИЕ ДАННЫХ ============
-    document.getElementById('profileName').textContent = currentUser.fullName;
-    document.getElementById('profilePhone').textContent = currentUser.phone;
-    document.getElementById('profileEmail').textContent = currentUser.email;
-    document.getElementById('profileAvatar').textContent = currentUser.fullName.charAt(0).toUpperCase();
-
-    const userButton = document.getElementById('userButton');
-    if (userButton) userButton.textContent = currentUser.fullName.split(' ')[0];
-
-    document.getElementById('editFullName').value = currentUser.fullName;
-    document.getElementById('editPhone').value = currentUser.phone;
-    document.getElementById('editEmail').value = currentUser.email;
-
-    // ============ ОБНОВИТЬ СЧЁТЧИК В ШАПКЕ ============
+    // ============ ОБНОВИТЬ СЧЁТЧИКИ ============
     function updateHeaderFavoritesCount() {
         const favorites = JSON.parse(localStorage.getItem('sibavto_favorites_' + currentUser.id) || '[]');
         const count = favorites.length;
@@ -33,7 +20,6 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // ============ ОБНОВИТЬ СЧЁТЧИК КОРЗИНЫ ============
     function updateHeaderCartCount() {
         const cart = JSON.parse(localStorage.getItem('sibavto_cart') || '[]');
         const count = cart.reduce((sum, item) => sum + item.quantity, 0);
@@ -46,6 +32,19 @@ document.addEventListener('DOMContentLoaded', function () {
 
     updateHeaderFavoritesCount();
     updateHeaderCartCount();
+
+    // ============ ЗАПОЛНЕНИЕ ДАННЫХ ============
+    document.getElementById('profileName').textContent = currentUser.fullName;
+    document.getElementById('profilePhone').textContent = currentUser.phone;
+    document.getElementById('profileEmail').textContent = currentUser.email;
+    document.getElementById('profileAvatar').textContent = currentUser.fullName.charAt(0).toUpperCase();
+
+    const userButton = document.getElementById('userButton');
+    if (userButton) userButton.textContent = currentUser.fullName.split(' ')[0];
+
+    document.getElementById('editFullName').value = currentUser.fullName;
+    document.getElementById('editPhone').value = currentUser.phone;
+    document.getElementById('editEmail').value = currentUser.email;
 
     // ============ СОХРАНЕНИЕ ЛИЧНЫХ ДАННЫХ ============
     document.getElementById('profileInfoForm').addEventListener('submit', function (e) {
@@ -94,7 +93,6 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    // Проверка хэша
     if (window.location.hash === '#favorites') {
         setTimeout(() => switchTab('favorites'), 100);
     }
@@ -156,7 +154,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     renderOrders();
 
-    // ============ ИЗБРАННОЕ ============
+    // ============ ИЗБРАННОЕ (с картинками и сердцем) ============
     function renderFavorites() {
         const favorites = JSON.parse(localStorage.getItem('sibavto_favorites_' + currentUser.id) || '[]');
         const container = document.getElementById('favoritesList');
@@ -174,20 +172,32 @@ document.addEventListener('DOMContentLoaded', function () {
 
         container.innerHTML = `
             <div class="products__grid">
-                ${favorites.map(item => `
-                    <div class="product__card" data-article="${item.article}">
-                        <button class="favorite-btn favorite-btn--active" data-article="${item.article}" title="Удалить из избранного">★</button>
-                        <div class="product__image">■</div>
-                        <h3 class="product__name">${item.name}</h3>
-                        <p class="product__article">Артикул: ${item.article}</p>
-                        <p class="product__price">${item.price.toLocaleString('ru-RU')} руб.</p>
-                        <button class="btn btn--primary btn--small add-to-cart-fav" data-id="${item.id}">В корзину</button>
-                    </div>
-                `).join('')}
+                ${favorites.map(item => {
+                    const imageUrl = item.image || 'https://via.placeholder.com/400x300/cccccc/ffffff?text=No+Image';
+                    return `
+                        <div class="product__card" data-article="${item.article}">
+                            <a href="product.html?id=${item.id}" class="product__link">
+                                <div class="product__image-wrapper">
+                                    <img src="${imageUrl}" alt="${item.name}" class="product__image-img" loading="lazy">
+                                </div>
+                                <h3 class="product__name">${item.name}</h3>
+                                <p class="product__article">Артикул: ${item.article}</p>
+                            </a>
+                            <p class="product__price">${item.price.toLocaleString('ru-RU')} руб.</p>
+                            <div class="product__status-row">
+                                <span class="product__status product__status--in">В наличии</span>
+                                <button class="favorite-btn-heart favorite-btn-heart--active" 
+                                        data-article="${item.article}" 
+                                        title="Удалить из избранного">❤</button>
+                            </div>
+                            <button class="btn btn--primary btn--small add-to-cart-fav" data-id="${item.id}">В корзину</button>
+                        </div>
+                    `;
+                }).join('')}
             </div>
         `;
 
-        // Кнопки "В корзину"
+        // Кнопка "В корзину"
         container.querySelectorAll('.add-to-cart-fav').forEach(btn => {
             btn.addEventListener('click', function () {
                 const id = parseInt(this.dataset.id);
@@ -207,8 +217,8 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         });
 
-        // Удаление из избранного
-        container.querySelectorAll('.favorite-btn').forEach(btn => {
+        // Сердце — удалить из избранного
+        container.querySelectorAll('.favorite-btn-heart').forEach(btn => {
             btn.addEventListener('click', function () {
                 const article = this.dataset.article;
                 const favs = JSON.parse(localStorage.getItem('sibavto_favorites_' + currentUser.id) || '[]');
@@ -264,7 +274,6 @@ document.addEventListener('DOMContentLoaded', function () {
             </div>
         `).join('');
 
-        // Удаление
         container.querySelectorAll('.address__delete').forEach(btn => {
             btn.addEventListener('click', function () {
                 if (!confirm('Удалить этот адрес?')) return;
@@ -277,7 +286,6 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         });
 
-        // Использовать
         container.querySelectorAll('.address__use').forEach(btn => {
             btn.addEventListener('click', function () {
                 const index = parseInt(this.dataset.index);
@@ -293,7 +301,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
     renderAddresses();
 
-    // Добавление адреса
     const addressForm = document.getElementById('addressForm');
     if (addressForm) {
         addressForm.addEventListener('submit', function (e) {
