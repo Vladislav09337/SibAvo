@@ -295,11 +295,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // ============ ДОБАВИТЬ В КОРЗИНУ ============
     function addToCartById(id) {
+        if (typeof requireAuthForCart === 'function' && !requireAuthForCart()) return;
+
         const product = window.SIBAVTO_PRODUCTS.find(p => p.id === id);
         if (!product) return;
 
         const cart = JSON.parse(localStorage.getItem('sibavto_cart') || '[]');
         const existing = cart.find(item => item.article === product.article);
+        
 
         if (existing) {
             existing.quantity++;

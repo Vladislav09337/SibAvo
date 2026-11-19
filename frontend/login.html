@@ -18,11 +18,28 @@
                 <input type="password" id="loginPassword" placeholder="Пароль" required>
                 <button type="submit" class="btn btn--primary btn--full">Войти</button>
             </form>
-            <p class="auth__link">
-                Нет аккаунта? <a href="register.html">Зарегистрироваться</a>
-            </p>
+            
+            <div class="auth__links" style="display: flex; justify-content: space-between; align-items: center; margin-top: 16px; font-size: 14px;">
+                <a href="#" id="forgotPasswordBtn" style="color: #888; transition: color 0.2s;" onmouseover="this.style.color='#e63946'" onmouseout="this.style.color='#888'">Забыли пароль?</a>
+                <p class="auth__link" style="margin: 0;">Нет аккаунта? <a href="register.html">Зарегистрироваться</a></p>
+            </div>
         </div>
     </div>
+
+    <!-- Модальное окно "Восстановление пароля" -->
+    <div class="modal" id="forgotModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 9999; align-items: center; justify-content: center; backdrop-filter: blur(4px);">
+        <div style="background: #fff; padding: 32px; border-radius: 16px; max-width: 400px; width: 90%; text-align: center; box-shadow: 0 20px 40px rgba(0,0,0,0.2);">
+            <div style="font-size: 40px; margin-bottom: 16px;">🔑</div>
+            <h2 style="margin-bottom: 12px; color: #1a2332; font-size: 22px;">Восстановление пароля</h2>
+            <p style="font-size: 14px; color: #666; margin-bottom: 24px; line-height: 1.5;">Введите ваш email, и мы отправим ссылку для сброса пароля.</p>
+            <form id="forgotForm">
+                <input type="email" id="forgotEmail" placeholder="Ваш E-mail" required style="width: 100%; padding: 14px 16px; border: 2px solid #e0e0e0; border-radius: 8px; margin-bottom: 20px; font-family: inherit; font-size: 15px; outline: none; transition: border-color 0.2s;" onfocus="this.style.borderColor='#e63946'" onblur="this.style.borderColor='#e0e0e0'">
+                <button type="submit" class="btn btn--primary btn--full" style="margin-bottom: 12px; padding: 14px; font-size: 16px;">Отправить ссылку</button>
+                <button type="button" id="closeForgotModal" style="background: none; border: none; color: #888; cursor: pointer; font-size: 14px; font-family: inherit;">Отмена</button>
+            </form>
+        </div>
+    </div>
+
     <script src="js/main.js"></script>
     <script src="js/chat-bot.js"></script>
 </body>

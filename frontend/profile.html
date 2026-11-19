@@ -7,49 +7,52 @@
     <meta name="description" content="Личный кабинет SibAvto.">
     <title>Личный кабинет — SibAvto</title>
     <link rel="stylesheet" href="css/style.css">
+    <script>
+        // Запасной выход на случай, если profile.js не загрузится
+        function logoutUser() {
+            localStorage.removeItem('sibavto_current_user');
+            window.location.href = 'index.html';
+        }
+    </script>
 </head>
 <body>
     <header class="header">
-    <div class="container header__inner">
-        <a href="index.html" class="logo"><span class="logo__text">Sib<span>Avto</span></span></a>
-        <nav class="nav">
-            <a href="index.html" class="nav__link">Главная</a>
-            <a href="catalog.html" class="nav__link">Каталог</a>
-            <a href="employees.html" class="nav__link">Сотрудники</a>
-            <a href="about.html" class="nav__link">О компании</a>
-            <a href="contacts.html" class="nav__link">Контакты</a>
-            <a href="integrations.html" class="nav__link">Интеграции</a>
-        </nav>
-        <div class="user-menu">
-            <button class="user-menu__btn" id="userMenuBtn">
-                <span class="user-menu__avatar">👤</span>
-                <span class="user-menu__name">Профиль</span>
-                <span class="user-menu__arrow">▾</span>
-            </button>
-            <div class="user-menu__dropdown" id="userDropdown">
-                <a href="profile.html" class="user-menu__item">
-                    <span>👤</span> Мой профиль
-                </a>
-                <a href="profile.html#favorites" class="user-menu__item">
-                    <span>★</span> Избранное
-                    <span class="user-menu__badge" id="favoritesBadge">0</span>
-                </a>
-                <a href="compare.html" class="user-menu__item">
-                    <span>⚖</span> Сравнение
-                    <span class="user-menu__badge" id="compareBadge">0</span>
-                </a>
-                <a href="cart.html" class="user-menu__item">
-                    <span>🛒</span> Корзина
-                    <span class="user-menu__badge" id="cartBadge">0</span>
-                </a>
-                <div class="user-menu__divider"></div>
-                <a href="login.html" class="user-menu__item user-menu__item--login">
-                    <span>🔓</span> Войти / Регистрация
-                </a>
+        <div class="container header__inner">
+            <a href="index.html" class="logo"><span class="logo__text">Sib<span>Avto</span></span></a>
+            <nav class="nav">
+                <a href="index.html" class="nav__link">Главная</a>
+                <a href="catalog.html" class="nav__link">Каталог</a>
+                <a href="employees.html" class="nav__link">Сотрудники</a>
+                <a href="about.html" class="nav__link">О компании</a>
+                <a href="contacts.html" class="nav__link">Контакты</a>
+                <a href="integrations.html" class="nav__link">Интеграции</a>
+            </nav>
+            <div class="user-menu">
+                <button class="user-menu__btn" id="userMenuBtn">
+                    <span class="user-menu__avatar">👤</span>
+                    <span class="user-menu__name">Профиль</span>
+                    <span class="user-menu__arrow">▾</span>
+                </button>
+                <div class="user-menu__dropdown" id="userDropdown">
+                    <a href="profile.html" class="user-menu__item"><span>👤</span> Мой профиль</a>
+                    <a href="profile.html#favorites" class="user-menu__item">
+                        <span>★</span> Избранное
+                        <span class="user-menu__badge" id="favoritesBadge">0</span>
+                    </a>
+                    <a href="compare.html" class="user-menu__item">
+                        <span>⚖</span> Сравнение
+                        <span class="user-menu__badge" id="compareBadge">0</span>
+                    </a>
+                    <a href="cart.html" class="user-menu__item">
+                        <span>🛒</span> Корзина
+                        <span class="user-menu__badge" id="cartBadge">0</span>
+                    </a>
+                    <div class="user-menu__divider"></div>
+                    <a href="login.html" class="user-menu__item user-menu__item--login"><span>🔓</span> Войти / Регистрация</a>
+                </div>
             </div>
         </div>
-    </div>
-</header>
+    </header>
 
     <main class="profile">
         <div class="container">
@@ -70,7 +73,10 @@
                         <a href="#" class="profile__menu-item" data-tab="settings">Настройки</a>
                     </nav>
 
-                    <button class="btn btn--outline btn--full" id="logoutBtn" style="margin-top: 20px; border-color: #e63946; color: #e63946;">Выйти</button>
+                    <!-- КНОПКА ВЫХОДА (с onclick) -->
+                    <button class="btn btn--outline btn--full" id="logoutBtn" onclick="logoutUser()" style="margin-top: 20px; border-color: #e63946; color: #e63946;">
+                        Выйти
+                    </button>
                 </aside>
 
                 <div class="profile__content">
@@ -78,19 +84,10 @@
                         <h2>Личные данные</h2>
                         <form class="profile__form" id="profileInfoForm">
                             <div class="form__row">
-                                <label>
-                                    ФИО
-                                    <input type="text" id="editFullName">
-                                </label>
-                                <label>
-                                    Телефон
-                                    <input type="tel" id="editPhone">
-                                </label>
+                                <label>ФИО <input type="text" id="editFullName"></label>
+                                <label>Телефон <input type="tel" id="editPhone"></label>
                             </div>
-                            <label>
-                                E-mail
-                                <input type="email" id="editEmail">
-                            </label>
+                            <label>E-mail <input type="email" id="editEmail"></label>
                             <button type="submit" class="btn btn--primary">Сохранить изменения</button>
                         </form>
                     </section>
@@ -107,87 +104,63 @@
 
                     <section class="profile__tab" data-tab="addresses">
                         <h2>Адреса доставки</h2>
-
                         <form class="address__form" id="addressForm">
                             <div class="form__row">
-                                <label>
-                                    Название адреса
-                                    <input type="text" id="addressLabel" placeholder="Например: Дом, Работа" required>
-                                </label>
-                                <label>
-                                    Город
-                                    <input type="text" id="addressCity" placeholder="Новосибирск" required>
-                                </label>
+                                <label>Название адреса <input type="text" id="addressLabel" placeholder="Например: Дом, Работа" required></label>
+                                <label>Полный адрес <input type="text" id="addressFull" placeholder="Город, улица, дом, квартира" required></label>
                             </div>
-                            <div class="form__row">
-                                <label>
-                                    Улица, дом
-                                    <input type="text" id="addressStreet" placeholder="ул. Ленина, д. 10" required>
-                                </label>
-                                <label>
-                                    Квартира / офис
-                                    <input type="text" id="addressApt" placeholder="кв. 5">
-                                </label>
-                            </div>
-                            <label>
-                                Комментарий курьеру
-                                <input type="text" id="addressComment" placeholder="Домофон 25, позвонить за час">
-                            </label>
-                            <button type="submit" class="btn btn--primary">Добавить адрес</button>
+                            <label>Комментарий (необязательно) <input type="text" id="addressComment" placeholder="Например: код домофона 1234"></label>
+                            <button type="submit" class="btn btn--primary">Сохранить адрес</button>
                         </form>
-
-                        <div id="addressesList" class="addresses__list"></div>
+                        <div id="addressesList"></div>
                     </section>
 
                     <section class="profile__tab" data-tab="settings">
                         <h2>Настройки</h2>
                         <div class="profile__setting">
-                            <label><input type="checkbox" id="notifyOrders" checked> Уведомления о статусе заказов</label>
+                            <label><input type="checkbox" checked> Получать уведомления о статусе заказа</label>
                         </div>
                         <div class="profile__setting">
-                            <label><input type="checkbox" id="notifyPromo" checked> Уведомления об акциях и скидках</label>
+                            <label><input type="checkbox"> Получать новости и акции</label>
                         </div>
-                        <div class="profile__setting">
-                            <label><input type="checkbox" id="notifyNew"> Уведомления о новых товарах</label>
-                        </div>
-                        <button class="btn btn--primary" id="saveSettingsBtn" style="margin-top: 20px;">Сохранить настройки</button>
+                        <button class="btn btn--primary" style="margin-top: 20px;" onclick="showToast('Настройки сохранены', 'success')">Сохранить настройки</button>
                     </section>
                 </div>
             </div>
         </div>
     </main>
 
-<footer class="footer">
-    <div class="container footer__inner">
-        <div class="footer__col">
-            <h4>SibAvto</h4>
-            <p>Лицензированный продавец автозапчастей</p>
-            <p>Лицензия № 54-АА-123456 от 01.01.2020</p>
+    <footer class="footer">
+        <div class="container footer__inner">
+            <div class="footer__col">
+                <h4>SibAvto</h4>
+                <p>Лицензированный продавец автозапчастей</p>
+                <p>Лицензия № 54-АА-123456 от 01.01.2020</p>
+            </div>
+            <div class="footer__col">
+                <h4>Разделы</h4>
+                <a href="catalog.html">Каталог</a>
+                <a href="employees.html">Сотрудники</a>
+                <a href="about.html">О компании</a>
+                <a href="contacts.html">Контакты</a>
+            </div>
+            <div class="footer__col">
+                <h4>Помощь</h4>
+                <a href="delivery.html">Доставка и оплата</a>
+                <a href="warranty.html">Гарантия и возврат</a>
+                <a href="faq.html">Частые вопросы</a>
+            </div>
+            <div class="footer__col">
+                <h4>Контакты</h4>
+                <p>+7 (383) 123-45-67</p>
+                <p>info@sibavto.ru</p>
+                <p>г. Новосибирск, ул. Автозаводская, 15</p>
+            </div>
         </div>
-        <div class="footer__col">
-            <h4>Разделы</h4>
-            <a href="catalog.html">Каталог</a>
-            <a href="employees.html">Сотрудники</a>
-            <a href="about.html">О компании</a>
-            <a href="contacts.html">Контакты</a>
+        <div class="footer__bottom">
+            <p>2026 SibAvto. Все права защищены.</p>
         </div>
-        <div class="footer__col">
-            <h4>Помощь</h4>
-            <a href="delivery.html">Доставка и оплата</a>
-            <a href="warranty.html">Гарантия и возврат</a>
-            <a href="faq.html">Частые вопросы</a>
-        </div>
-        <div class="footer__col">
-            <h4>Контакты</h4>
-            <p>+7 (383) 123-45-67</p>
-            <p>info@sibavto.ru</p>
-            <p>г. Новосибирск, ул. Автозаводская, 15</p>
-        </div>
-    </div>
-    <div class="footer__bottom">
-        <p>2026 SibAvto. Все права защищены.</p>
-    </div>
-</footer>
+    </footer>
 
     <script src="js/main.js"></script>
     <script src="js/profile.js"></script>

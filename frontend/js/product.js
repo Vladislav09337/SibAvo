@@ -161,10 +161,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
         container.innerHTML = html;
 
-        // Кнопка "В корзину"
+        // ============ КНОПКА "В КОРЗИНУ" (С ПРОВЕРКОЙ АВТОРИЗАЦИИ) ============
         const addBtn = container.querySelector('.add-to-cart-detail');
         if (addBtn) {
             addBtn.addEventListener('click', function () {
+                // ПРОВЕРКА АВТОРИЗАЦИИ
+                if (typeof requireAuthForCart === 'function' && !requireAuthForCart()) return;
+
                 const cart = JSON.parse(localStorage.getItem('sibavto_cart') || '[]');
                 const existing = cart.find(item => item.article === product.article);
                 if (existing) {

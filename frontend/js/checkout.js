@@ -60,18 +60,13 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         savedAddressesList.innerHTML = addresses.map((addr, i) => {
-            // Склеиваем адрес в одну строку — убираем лишние \n и пробелы
-            const cleanAddress = (addr.fullAddress || '')
-                .replace(/\s+/g, ' ')
-                .trim();
-
+            const cleanAddress = (addr.fullAddress || '').replace(/\s+/g, ' ').trim();
             return `
                 <label class="address__option">
                     <input type="radio" name="savedAddress" value="${i}">
                     <div class="address__option-content">
                         <strong class="address__option-title">
-                            <span class="address__option-icon">📍</span>
-                            ${addr.label || 'Адрес доставки'}
+                            <span class="address__option-icon">📍</span> ${addr.label || 'Адрес доставки'}
                         </strong>
                         <p class="address__option-text">${cleanAddress}</p>
                         ${addr.comment ? `<p class="address__option-comment">💬 ${addr.comment}</p>` : ''}
@@ -110,9 +105,7 @@ document.addEventListener('DOMContentLoaded', function () {
     if (cardExpiry) {
         cardExpiry.addEventListener('input', function () {
             let value = this.value.replace(/\D/g, '');
-            if (value.length >= 2) {
-                value = value.slice(0, 2) + '/' + value.slice(2, 4);
-            }
+            if (value.length >= 2) value = value.slice(0, 2) + '/' + value.slice(2, 4);
             this.value = value.slice(0, 5);
             if (previewExpiry) previewExpiry.textContent = this.value || 'MM/YY';
         });
@@ -163,22 +156,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 const cvv = cardCvv.value;
                 const holder = cardHolder.value.trim();
 
-                if (cardNum.length !== 16) {
-                    if (typeof showToast === 'function') showToast('Введите корректный номер карты (16 цифр)', 'error');
-                    return;
-                }
-                if (!holder) {
-                    if (typeof showToast === 'function') showToast('Введите имя держателя', 'error');
-                    return;
-                }
-                if (expiry.length !== 5) {
-                    if (typeof showToast === 'function') showToast('Введите срок действия (MM/YY)', 'error');
-                    return;
-                }
-                if (cvv.length !== 3) {
-                    if (typeof showToast === 'function') showToast('Введите CVV (3 цифры)', 'error');
-                    return;
-                }
+                if (cardNum.length !== 16) { showToast('Введите номер карты (16 цифр)', 'error'); return; }
+                if (!holder) { showToast('Введите имя держателя', 'error'); return; }
+                if (expiry.length !== 5) { showToast('Введите срок (MM/YY)', 'error'); return; }
+                if (cvv.length !== 3) { showToast('Введите CVV', 'error'); return; }
             }
 
             // Симуляция оплаты
@@ -186,21 +167,17 @@ document.addEventListener('DOMContentLoaded', function () {
                 const btn = this.querySelector('button[type="submit"]');
                 btn.textContent = 'Обработка оплаты...';
                 btn.disabled = true;
-
-                setTimeout(() => {
-                    completeOrder(cart, delivery, payment, address, comment);
-                }, 2000);
+                setTimeout(() => { completeOrder(cart, delivery, payment, address, comment); }, 1500);
             } else if (payment === 'sbp') {
-                if (typeof showToast === 'function') showToast('Подтвердите оплату в приложении банка', 'success');
-                setTimeout(() => {
-                    completeOrder(cart, delivery, payment, address, comment);
-                }, 3000);
+                showToast('Подтвердите оплату в приложении банка', 'success');
+                setTimeout(() => { completeOrder(cart, delivery, payment, address, comment); }, 2000);
             } else {
                 completeOrder(cart, delivery, payment, address, comment);
             }
         });
     }
 
+    // ============ СОХРАНЕНИЕ ЗАКАЗА ============
     function completeOrder(cart, delivery, payment, address, comment) {
         const orderNumber = '2026-' + Math.floor(1000 + Math.random() * 9000);
         const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
@@ -209,12 +186,12 @@ document.addEventListener('DOMContentLoaded', function () {
             number: orderNumber,
             items: cart,
             total: total,
-            status: 'new',
+            status: 'new', // Начальный статус
             deliveryMethod: delivery,
             address: address,
             paymentMethod: payment,
             comment: comment,
-            createdAt: new Date().toISOString()
+            createdAt: new Date().toISOString() // Фиксируем время
         };
 
         if (currentUser) {
@@ -225,17 +202,10 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         localStorage.removeItem('sibavto_cart');
-
-        if (typeof showToast === 'function') {
-            showToast('Заказ №' + orderNumber + ' оформлен!', 'success');
-        }
+        showToast('Заказ №' + orderNumber + ' оформлен!', 'success');
 
         setTimeout(() => {
-            if (currentUser) {
-                window.location.href = 'profile.html';
-            } else {
-                window.location.href = 'index.html';
-            }
-        }, 2000);
+            window.location.href = currentUser ? 'profile.html' : 'index.html';
+        }, 1500);
     }
 });

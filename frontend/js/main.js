@@ -34,6 +34,19 @@ function getCurrentUser() {
     return JSON.parse(localStorage.getItem('sibavto_current_user') || 'null');
 }
 
+// ============ ПРОВЕРКА АВТОРИЗАЦИИ ДЛЯ КОРЗИНЫ ============
+function requireAuthForCart() {
+    const user = getCurrentUser();
+    if (!user) {
+        showToast('Войдите в аккаунт, чтобы добавлять товары в корзину', 'error');
+        setTimeout(() => {
+            window.location.href = 'login.html';
+        }, 1500);
+        return false;
+    }
+    return true;
+}
+
 function updateHeaderUserButton() {
     const user = getCurrentUser();
     const btns = document.querySelectorAll('.header__actions .btn--outline');
@@ -132,7 +145,6 @@ function renderCart() {
         </div>
     `).join('');
 
-    // Кнопки +/-
     container.querySelectorAll('.qty-plus').forEach(btn => {
         btn.addEventListener('click', function () {
             const index = parseInt(this.closest('.cart__item').dataset.index);
@@ -174,17 +186,13 @@ function updateCartSummary(total) {
     const cart = getCart();
     const count = cart.reduce((sum, item) => sum + item.quantity, 0);
 
-    // Расчёт доставки
     const deliveryMethod = document.querySelector('input[name="deliveryMethod"]:checked');
     let deliveryCost = 0;
 
     if (deliveryMethod) {
         const method = deliveryMethod.value;
-        if (method === 'courier') {
-            deliveryCost = total >= 5000 ? 0 : 300;
-        } else if (method === 'post') {
-            deliveryCost = total >= 5000 ? 0 : 500;
-        }
+        if (method === 'courier') deliveryCost = total >= 5000 ? 0 : 300;
+        else if (method === 'post') deliveryCost = total >= 5000 ? 0 : 500;
     }
 
     const grandTotal = total + deliveryCost;
@@ -197,20 +205,12 @@ function updateCartSummary(total) {
     if (cartCount) cartCount.textContent = count;
     if (cartSubtotal) cartSubtotal.textContent = total.toLocaleString('ru-RU') + ' руб.';
     if (cartDelivery) {
-        if (deliveryMethod) {
-            cartDelivery.textContent = deliveryCost > 0
-                ? deliveryCost.toLocaleString('ru-RU') + ' руб.'
-                : 'Бесплатно';
-        } else {
-            cartDelivery.textContent = '—';
-        }
+        if (deliveryMethod) cartDelivery.textContent = deliveryCost > 0 ? deliveryCost.toLocaleString('ru-RU') + ' руб.' : 'Бесплатно';
+        else cartDelivery.textContent = '—';
     }
     if (cartTotal) cartTotal.textContent = grandTotal.toLocaleString('ru-RU') + ' руб.';
 
-    // Сохраняем выбранный способ доставки
-    if (deliveryMethod) {
-        localStorage.setItem('sibavto_delivery_method', deliveryMethod.value);
-    }
+    if (deliveryMethod) localStorage.setItem('sibavto_delivery_method', deliveryMethod.value);
 }
 
 // ============ ИНИЦИАЛИЗАЦИЯ ============
@@ -232,9 +232,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
 
         document.addEventListener('click', function (e) {
-            if (!userMenu.contains(e.target)) {
-                userMenu.classList.remove('user-menu--open');
-            }
+            if (!userMenu.contains(e.target)) userMenu.classList.remove('user-menu--open');
         });
     }
 
@@ -255,8 +253,6 @@ document.addEventListener('DOMContentLoaded', function () {
     // КОРЗИНА
     if (document.querySelector('.cart__items')) {
         renderCart();
-
-        // ВЫБОР ДОСТАВКИ
         document.querySelectorAll('input[name="deliveryMethod"]').forEach(radio => {
             radio.addEventListener('change', function () {
                 const cart = getCart();
@@ -264,8 +260,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 updateCartSummary(total);
             });
         });
-
-        // Восстановление выбранного способа
         const savedDelivery = localStorage.getItem('sibavto_delivery_method');
         if (savedDelivery) {
             const radio = document.querySelector(`input[name="deliveryMethod"][value="${savedDelivery}"]`);
@@ -276,21 +270,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 updateCartSummary(total);
             }
         }
-    }
-
-    // ПОИСК
-    const searchForm = document.querySelector('.search__form');
-    if (searchForm && !document.getElementById('articleInput')) {
-        searchForm.addEventListener('submit', function (e) {
-            e.preventDefault();
-            const query = this.querySelector('.search__input').value.trim();
-            if (query.length < 2) {
-                showToast('Введите минимум 2 символа', 'error');
-                return;
-            }
-            showToast('Поиск: ' + query, 'success');
-            setTimeout(() => window.location.href = 'catalog.html?highlight=' + encodeURIComponent(query), 800);
-        });
     }
 
     // ОБРАТНАЯ СВЯЗЬ
@@ -321,6 +300,31 @@ document.addEventListener('DOMContentLoaded', function () {
             } else {
                 showToast('Неверный телефон или пароль', 'error');
             }
+        });
+    }
+
+    // ВОССТАНОВЛЕНИЕ ПАРОЛЯ
+    const forgotBtn = document.getElementById('forgotPasswordBtn');
+    const forgotModal = document.getElementById('forgotModal');
+    const closeForgot = document.getElementById('closeForgotModal');
+    const forgotForm = document.getElementById('forgotForm');
+
+    if (forgotBtn && forgotModal) {
+        forgotBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            forgotModal.style.display = 'flex';
+        });
+        
+        closeForgot.addEventListener('click', function() {
+            forgotModal.style.display = 'none';
+        });
+
+        forgotForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = document.getElementById('forgotEmail').value;
+            showToast('Письмо с инструкцией отправлено на ' + email, 'success');
+            forgotModal.style.display = 'none';
+            this.reset();
         });
     }
 
