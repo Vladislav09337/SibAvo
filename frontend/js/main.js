@@ -2,7 +2,6 @@
 // SibAvto — основной JavaScript
 // ============================================================
 
-// Глобальная функция уведомления
 function showToast(message, type = 'success') {
     const toast = document.createElement('div');
     toast.className = 'toast toast--' + type;
@@ -15,383 +14,280 @@ function showToast(message, type = 'success') {
     }, 2500);
 }
 
-// Получить корзину
-function getCart() {
-    return JSON.parse(localStorage.getItem('sibavto_cart') || '[]');
-}
+function getCart() { return JSON.parse(localStorage.getItem('sibavto_cart') || '[]'); }
+function saveCart(cart) { localStorage.setItem('sibavto_cart', JSON.stringify(cart)); updateCartCount(); }
 
-// Сохранить корзину
-function saveCart(cart) {
-    localStorage.setItem('sibavto_cart', JSON.stringify(cart));
-    updateCartCount();
-}
-
-// Обновить счётчик корзины
 function updateCartCount() {
     const cart = getCart();
     const count = cart.reduce((sum, item) => sum + item.quantity, 0);
-    document.querySelectorAll('.header__icon').forEach(el => {
-        if (el.textContent.includes('Корзина')) {
-            el.textContent = 'Корзина' + (count > 0 ? ' (' + count + ')' : '');
-        }
+    const badges = document.querySelectorAll('#cartBadge');
+    badges.forEach(badge => {
+        badge.textContent = count;
+        badge.style.transform = 'scale(1.5)';
+        setTimeout(() => badge.style.transform = 'scale(1)', 200);
     });
 }
 
-// Получить текущего пользователя
-function getCurrentUser() {
-    return JSON.parse(localStorage.getItem('sibavto_current_user') || 'null');
+function getCurrentUser() { return JSON.parse(localStorage.getItem('sibavto_current_user') || 'null'); }
+
+function requireAuthForCart() {
+    const user = getCurrentUser();
+    if (!user) {
+        showToast('Войдите в аккаунт, чтобы добавлять товары в корзину', 'error');
+        setTimeout(() => { window.location.href = 'login.html'; }, 1500);
+        return false;
+    }
+    return true;
 }
 
-// Обновить кнопку профиля в шапке
 function updateHeaderUserButton() {
     const user = getCurrentUser();
     const btns = document.querySelectorAll('.header__actions .btn--outline');
     btns.forEach(btn => {
-        if (user) {
-            btn.textContent = user.fullName.split(' ')[0];
-            btn.href = 'profile.html';
-        } else {
-            btn.textContent = 'Войти';
-            btn.href = 'login.html';
-        }
+        if (user) { btn.textContent = user.fullName.split(' ')[0]; btn.href = 'profile.html'; }
+        else { btn.textContent = 'Войти'; btn.href = 'login.html'; }
     });
 }
 
-// ============ ИЗБРАННОЕ ============
 function getFavorites() {
     const user = getCurrentUser();
     if (!user) return [];
     return JSON.parse(localStorage.getItem('sibavto_favorites_' + user.id) || '[]');
 }
 
-function saveFavorites(favorites) {
-    const user = getCurrentUser();
-    if (!user) return;
-    localStorage.setItem('sibavto_favorites_' + user.id, JSON.stringify(favorites));
-    updateFavoritesCount();
-}
-
 function updateFavoritesCount() {
-    const favorites = getFavorites();
-    const count = favorites.length;
-    document.querySelectorAll('.header__favorites').forEach(el => {
-        el.textContent = 'Избранное' + (count > 0 ? ' (' + count + ')' : '');
-    });
+    const count = getFavorites().length;
+    const badge = document.getElementById('favoritesBadge');
+    if (badge) badge.textContent = count;
 }
 
-function isFavorite(article) {
-    return getFavorites().some(f => f.article === article);
+function updateCompareBadge() {
+    const compare = JSON.parse(localStorage.getItem('sibavto_compare') || '[]');
+    const badge = document.getElementById('compareBadge');
+    if (badge) badge.textContent = compare.length;
 }
 
 function toggleFavorite(product) {
     const user = getCurrentUser();
-    if (!user) {
-        showToast('Войдите в аккаунт, чтобы добавлять в избранное', 'error');
-        setTimeout(() => window.location.href = 'login.html', 1200);
-        return;
-    }
-
+    if (!user) { showToast('Войдите в аккаунт', 'error'); setTimeout(() => window.location.href = 'login.html', 1200); return; }
     const favorites = getFavorites();
     const existingIndex = favorites.findIndex(f => f.article === product.article);
+    if (existingIndex === -1) { favorites.push({ id: product.id, name: product.name, article: product.article, price: product.price, image: product.image || '' }); showToast('Добавлено в избранное', 'success'); }
+    else { favorites.splice(existingIndex, 1); showToast('Удалено из избранного', 'success'); }
+    localStorage.setItem('sibavto_favorites_' + user.id, JSON.stringify(favorites));
+    updateFavoritesCount();
+}
 
-    if (existingIndex === -1) {
-        favorites.push(product);
-        saveFavorites(favorites);
-        showToast('Добавлено в избранное', 'success');
-    } else {
-        favorites.splice(existingIndex, 1);
-        saveFavorites(favorites);
-        showToast('Удалено из избранного', 'success');
+function renderCart() {
+    const cart = getCart();
+    const container = document.querySelector('.cart__items');
+    if (!container) return;
+    if (cart.length === 0) {
+        container.innerHTML = `<div class="cart__empty"><p style="margin-bottom: 20px;">Ваша корзина пуста</p><a href="catalog.html" class="btn btn--primary">Перейти в каталог</a></div>`;
+        updateCartSummary(0);
+        return;
     }
-
-    updateFavoriteButtons();
+    container.innerHTML = cart.map((item, index) => `
+        <div class="cart__item" data-index="${index}">
+            <div class="cart__image">■</div>
+            <div class="cart__info"><h3>${item.name}</h3><p>Артикул: ${item.article}</p><p class="cart__price">${item.price.toLocaleString('ru-RU')} руб.</p></div>
+            <div class="cart__qty"><button class="qty-minus">−</button><input type="text" value="${item.quantity}" readonly><button class="qty-plus">+</button></div>
+            <div class="cart__total">${(item.price * item.quantity).toLocaleString('ru-RU')} руб.</div>
+            <button class="cart__remove">Удалить</button>
+        </div>
+    `).join('');
+    container.querySelectorAll('.qty-plus').forEach(btn => btn.addEventListener('click', function () { const i = parseInt(this.closest('.cart__item').dataset.index); const c = getCart(); c[i].quantity++; saveCart(c); renderCart(); }));
+    container.querySelectorAll('.qty-minus').forEach(btn => btn.addEventListener('click', function () { const i = parseInt(this.closest('.cart__item').dataset.index); const c = getCart(); if (c[i].quantity > 1) { c[i].quantity--; saveCart(c); renderCart(); } }));
+    container.querySelectorAll('.cart__remove').forEach(btn => btn.addEventListener('click', function () { const i = parseInt(this.closest('.cart__item').dataset.index); const c = getCart(); c.splice(i, 1); saveCart(c); renderCart(); showToast('Товар удалён из корзины', 'success'); }));
+    const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+    updateCartSummary(total);
 }
 
-function updateFavoriteButtons() {
-    document.querySelectorAll('.favorite-btn').forEach(btn => {
-        const article = btn.dataset.article;
-        if (isFavorite(article)) {
-            btn.textContent = '★';
-            btn.classList.add('favorite-btn--active');
-        } else {
-            btn.textContent = '☆';
-            btn.classList.remove('favorite-btn--active');
-        }
-    });
+function updateCartSummary(total) {
+    const cart = getCart();
+    const count = cart.reduce((sum, item) => sum + item.quantity, 0);
+    const deliveryMethod = document.querySelector('input[name="deliveryMethod"]:checked');
+    let deliveryCost = 0;
+    if (deliveryMethod) {
+        const method = deliveryMethod.value;
+        if (method === 'courier') deliveryCost = total >= 5000 ? 0 : 300;
+        else if (method === 'post') deliveryCost = total >= 5000 ? 0 : 500;
+    }
+    const grandTotal = total + deliveryCost;
+    const cartCount = document.getElementById('cartCount');
+    const cartSubtotal = document.getElementById('cartSubtotal');
+    const cartDelivery = document.getElementById('cartDelivery');
+    const cartTotal = document.getElementById('cartTotal');
+    if (cartCount) cartCount.textContent = count;
+    if (cartSubtotal) cartSubtotal.textContent = total.toLocaleString('ru-RU') + ' руб.';
+    if (cartDelivery) { if (deliveryMethod) cartDelivery.textContent = deliveryCost > 0 ? deliveryCost.toLocaleString('ru-RU') + ' руб.' : 'Бесплатно'; else cartDelivery.textContent = '—'; }
+    if (cartTotal) cartTotal.textContent = grandTotal.toLocaleString('ru-RU') + ' руб.';
+    if (deliveryMethod) localStorage.setItem('sibavto_delivery_method', deliveryMethod.value);
 }
 
-// ============ ИНИЦИАЛИЗАЦИЯ ============
+function renderHomeCards(containerId) {
+    const container = document.getElementById(containerId);
+    if (!container || !window.SIBAVTO_PRODUCTS) return;
+    const items = [...window.SIBAVTO_PRODUCTS].sort(() => 0.5 - Math.random()).slice(0, 4);
+    container.innerHTML = items.map(p => {
+        const img = (p.images && p.images.length > 0) ? p.images[0] : 'https://via.placeholder.com/400x300/cccccc/ffffff?text=No+Image';
+        return `
+            <div class="product__card">
+                <a href="product.html?id=${p.id}" class="product__link">
+                    <div class="product__image-wrapper"><img src="${img}" alt="${p.name}" class="product__image-img" loading="lazy"></div>
+                    <h3 class="product__name">${p.name}</h3>
+                    <p class="product__article">Артикул: ${p.article}</p>
+                </a>
+                <p class="product__price">${p.price.toLocaleString('ru-RU')} руб.</p>
+                <span class="product__status product__status--${p.status === 'in_stock' ? 'in' : 'order'}">${p.status === 'in_stock' ? 'В наличии' : 'Под заказ'}</span>
+            </div>
+        `;
+    }).join('');
+}
+
 document.addEventListener('DOMContentLoaded', function () {
-
     updateCartCount();
     updateHeaderUserButton();
     updateFavoritesCount();
-    updateFavoriteButtons();
+    updateCompareBadge();
 
-    // ============ ДОБАВЛЕНИЕ В КОРЗИНУ ============
-    document.querySelectorAll('.add-to-cart').forEach(btn => {
-        btn.addEventListener('click', function (e) {
-            e.preventDefault();
+    renderHomeCards('hitsGrid');
+    renderHomeCards('newGrid');
 
-            const card = this.closest('.product__card');
-            if (!card) return;
-
-            const name = card.querySelector('.product__name').textContent;
-            const article = card.querySelector('.product__article').textContent.replace('Артикул: ', '').trim();
-            const priceText = card.querySelector('.product__price').textContent;
-            const price = parseInt(priceText.replace(/[^\d]/g, ''));
-
-            const cart = getCart();
-            const existing = cart.find(item => item.article === article);
-
-            if (existing) {
-                existing.quantity++;
-            } else {
-                cart.push({ name, article, price, quantity: 1 });
-            }
-
-            saveCart(cart);
-            showToast('Товар добавлен в корзину', 'success');
-        });
-    });
-
-    // ============ КНОПКИ ИЗБРАННОГО ============
-    document.addEventListener('click', function (e) {
-        const btn = e.target.closest('.favorite-btn');
-        if (!btn) return;
-        e.preventDefault();
-
-        const card = btn.closest('.product__card');
-        if (!card) return;
-
-        const article = btn.dataset.article || card.querySelector('.product__article')?.textContent.replace('Артикул: ', '').trim();
-        const name = card.querySelector('.product__name')?.textContent;
-        const priceText = card.querySelector('.product__price')?.textContent;
-        const price = parseInt(priceText?.replace(/[^\d]/g, '') || 0);
-        const id = card.dataset.id ? parseInt(card.dataset.id) : null;
-
-        if (!article) return;
-
-        toggleFavorite({ id, name, article, price });
-    });
-
-    // ============ ПОИСК ПО VIN ============
-    const searchForm = document.querySelector('.search__form');
-    if (searchForm && !document.getElementById('articleInput')) {
-        searchForm.addEventListener('submit', function (e) {
-            e.preventDefault();
-            const vin = this.querySelector('.search__input').value.trim();
-            if (vin.length < 5) {
-                showToast('Введите VIN-номер (минимум 5 символов)', 'error');
-                return;
-            }
-            showToast('Поиск по VIN: ' + vin, 'success');
-            setTimeout(() => window.location.href = 'catalog.html', 1000);
-        });
+    const userMenuBtn = document.getElementById('userMenuBtn');
+    const userMenu = document.querySelector('.user-menu');
+    if (userMenuBtn && userMenu) {
+        userMenuBtn.addEventListener('click', function (e) { e.stopPropagation(); userMenu.classList.toggle('user-menu--open'); });
+        document.addEventListener('click', function (e) { if (!userMenu.contains(e.target)) userMenu.classList.remove('user-menu--open'); });
     }
 
-    // ============ БРЕНДЫ НА ГЛАВНОЙ ============
     const brandsGrid = document.getElementById('brands-grid');
     if (brandsGrid && window.SIBAVTO_BRANDS) {
         brandsGrid.innerHTML = window.SIBAVTO_BRANDS.map(brand => `
             <a href="catalog.html?brand=${brand.id}" class="brand__card">
-                <div class="brand__logo">${brand.name.charAt(0)}</div>
+                <div class="brand__logo-img"><img src="images/brands/${brand.id}.png" alt="${brand.name}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="brand__logo-fallback" style="display: none;">${brand.name.charAt(0)}</div></div>
                 <div class="brand__name">${brand.name}</div>
             </a>
         `).join('');
     }
 
-    // ============ КОРЗИНА ============
     if (document.querySelector('.cart__items')) {
         renderCart();
-
-        function renderCart() {
-            const cart = getCart();
-            const container = document.querySelector('.cart__items');
-
-            if (cart.length === 0) {
-                container.innerHTML = `
-                    <div class="cart__empty">
-                        <p style="margin-bottom: 20px;">Ваша корзина пуста</p>
-                        <a href="catalog.html" class="btn btn--primary">Перейти в каталог</a>
-                    </div>
-                `;
-                updateSummary(0);
-                return;
-            }
-
-            container.innerHTML = cart.map((item, index) => `
-                <div class="cart__item" data-index="${index}">
-                    <div class="cart__image">■</div>
-                    <div class="cart__info">
-                        <h3>${item.name}</h3>
-                        <p>Артикул: ${item.article}</p>
-                        <p class="cart__price">${item.price.toLocaleString('ru-RU')} руб.</p>
-                    </div>
-                    <div class="cart__qty">
-                        <button class="qty-minus">−</button>
-                        <input type="text" value="${item.quantity}" readonly>
-                        <button class="qty-plus">+</button>
-                    </div>
-                    <div class="cart__total">${(item.price * item.quantity).toLocaleString('ru-RU')} руб.</div>
-                    <button class="cart__remove">Удалить</button>
-                </div>
-            `).join('');
-
-            container.querySelectorAll('.qty-plus').forEach(btn => {
-                btn.addEventListener('click', function () {
-                    const index = this.closest('.cart__item').dataset.index;
-                    const cart = getCart();
-                    cart[index].quantity++;
-                    saveCart(cart);
-                    renderCart();
-                });
-            });
-
-            container.querySelectorAll('.qty-minus').forEach(btn => {
-                btn.addEventListener('click', function () {
-                    const index = this.closest('.cart__item').dataset.index;
-                    const cart = getCart();
-                    if (cart[index].quantity > 1) {
-                        cart[index].quantity--;
-                        saveCart(cart);
-                        renderCart();
-                    }
-                });
-            });
-
-            container.querySelectorAll('.cart__remove').forEach(btn => {
-                btn.addEventListener('click', function () {
-                    const index = this.closest('.cart__item').dataset.index;
-                    const cart = getCart();
-                    cart.splice(index, 1);
-                    saveCart(cart);
-                    renderCart();
-                    showToast('Товар удалён из корзины', 'success');
-                });
-            });
-
-            const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
-            updateSummary(total);
-        }
-
-        function updateSummary(total) {
-            const summary = document.querySelector('.cart__summary');
-            if (!summary) return;
-
-            const cart = getCart();
-            const count = cart.reduce((sum, item) => sum + item.quantity, 0);
-            const rows = summary.querySelectorAll('.cart__row');
-
-            if (rows.length >= 3) {
-                rows[0].querySelector('span:first-child').textContent = 'Товары (' + count + ' шт.)';
-                rows[0].querySelector('span:last-child').textContent = total.toLocaleString('ru-RU') + ' руб.';
-                rows[2].querySelector('span:last-child').textContent = total.toLocaleString('ru-RU') + ' руб.';
-            }
-        }
+        document.querySelectorAll('input[name="deliveryMethod"]').forEach(radio => radio.addEventListener('change', function () { const cart = getCart(); const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0); updateCartSummary(total); }));
+        const savedDelivery = localStorage.getItem('sibavto_delivery_method');
+        if (savedDelivery) { const radio = document.querySelector(`input[name="deliveryMethod"][value="${savedDelivery}"]`); if (radio) { radio.checked = true; const cart = getCart(); const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0); updateCartSummary(total); } }
     }
 
-    // ============ ОБРАТНАЯ СВЯЗЬ ============
     const contactsForm = document.querySelector('.contacts__form form');
-    if (contactsForm) {
-        contactsForm.addEventListener('submit', function (e) {
-            e.preventDefault();
-            showToast('Сообщение отправлено! Мы свяжемся с вами', 'success');
-            this.reset();
-        });
-    }
+    if (contactsForm) contactsForm.addEventListener('submit', function (e) { e.preventDefault(); showToast('Сообщение отправлено!', 'success'); this.reset(); });
 
-    // ============ АВТОРИЗАЦИЯ (Login) ============
+    // ЛОГИКА ВХОДА
     const loginForm = document.getElementById('loginForm');
     if (loginForm) {
         loginForm.addEventListener('submit', function (e) {
             e.preventDefault();
-
             const phone = document.getElementById('loginPhone').value.trim();
             const password = document.getElementById('loginPassword').value;
-
             const users = JSON.parse(localStorage.getItem('sibavto_users') || '[]');
             const user = users.find(u => u.phone === phone && u.password === password);
-
             if (user) {
-                localStorage.setItem('sibavto_current_user', JSON.stringify({
-                    id: user.id,
-                    fullName: user.fullName,
-                    phone: user.phone,
-                    email: user.email
-                }));
+                localStorage.setItem('sibavto_current_user', JSON.stringify({ id: user.id, fullName: user.fullName, phone: user.phone, email: user.email, role: user.role, entityType: user.entityType }));
                 showToast('Добро пожаловать, ' + user.fullName + '!', 'success');
                 setTimeout(() => window.location.href = 'profile.html', 800);
-            } else {
-                showToast('Неверный телефон или пароль', 'error');
+            } else { showToast('Неверный телефон или пароль', 'error'); }
+        });
+    }
+
+    // ВОССТАНОВЛЕНИЕ ПАРОЛЯ
+    const forgotBtn = document.getElementById('forgotPasswordBtn');
+    const forgotModal = document.getElementById('forgotModal');
+    const closeForgot = document.getElementById('closeForgotModal');
+    const step1 = document.getElementById('step1');
+    const step2 = document.getElementById('step2');
+    const step3 = document.getElementById('step3');
+    let resetCode = null;
+    let resetUserContact = null;
+
+    if (forgotBtn && forgotModal) {
+        forgotBtn.addEventListener('click', function(e) { e.preventDefault(); forgotModal.style.display = 'flex'; step1.style.display = 'block'; step2.style.display = 'none'; step3.style.display = 'none'; });
+        closeForgot.addEventListener('click', () => { forgotModal.style.display = 'none'; });
+
+        document.getElementById('forgotFormStep1').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const contact = document.getElementById('forgotContact').value.trim();
+            const users = JSON.parse(localStorage.getItem('sibavto_users') || '[]');
+            const user = users.find(u => u.phone === contact || u.email === contact);
+            if (!user) { showToast('Пользователь не найден', 'error'); return; }
+            resetCode = Math.floor(100000 + Math.random() * 900000).toString();
+            resetUserContact = contact;
+            console.log(`%c[КОД] ${resetCode}`, 'color: #e63946; font-size: 20px; font-weight: bold;');
+            showToast(`Код отправлен! (Код: ${resetCode} в F12)`, 'success');
+            document.getElementById('sentToDisplay').textContent = contact;
+            step1.style.display = 'none'; step2.style.display = 'block';
+        });
+
+        document.getElementById('forgotFormStep2').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const enteredCode = document.getElementById('forgotCode').value.trim();
+            if (enteredCode !== resetCode) { showToast('Неверный код', 'error'); return; }
+            step2.style.display = 'none'; step3.style.display = 'block';
+        });
+
+        document.getElementById('forgotFormStep3').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const pass1 = document.getElementById('newPassword').value;
+            const pass2 = document.getElementById('newPasswordConfirm').value;
+            if (pass1 !== pass2) { showToast('Пароли не совпадают', 'error'); return; }
+            const users = JSON.parse(localStorage.getItem('sibavto_users') || '[]');
+            const userIndex = users.findIndex(u => u.phone === resetUserContact || u.email === resetUserContact);
+            if (userIndex !== -1) {
+                users[userIndex].password = pass1;
+                localStorage.setItem('sibavto_users', JSON.stringify(users));
+                showToast('Пароль изменен!', 'success');
+                forgotModal.style.display = 'none';
+                document.getElementById('loginPhone').value = resetUserContact;
             }
         });
     }
 
-    // ============ РЕГИСТРАЦИЯ ============
+    // РЕГИСТРАЦИЯ
     const registerForm = document.getElementById('registerForm');
     if (registerForm) {
         registerForm.addEventListener('submit', function (e) {
             e.preventDefault();
-
             const fullName = document.getElementById('regFullName').value.trim();
             const phone = document.getElementById('regPhone').value.trim();
             const email = document.getElementById('regEmail').value.trim();
             const password = document.getElementById('regPassword').value;
             const password2 = document.getElementById('regPassword2').value;
-
-            if (password !== password2) {
-                showToast('Пароли не совпадают', 'error');
-                return;
-            }
-
-            if (password.length < 6) {
-                showToast('Пароль должен быть минимум 6 символов', 'error');
-                return;
-            }
-
+            const entityType = document.querySelector('input[name="entityType"]:checked').value;
+            const isAdmin = document.getElementById('isAdminReg') ? document.getElementById('isAdminReg').checked : false;
+            if (password !== password2) { showToast('Пароли не совпадают', 'error'); return; }
+            if (password.length < 6) { showToast('Пароль минимум 6 символов', 'error'); return; }
             const users = JSON.parse(localStorage.getItem('sibavto_users') || '[]');
-            if (users.find(u => u.phone === phone)) {
-                showToast('Пользователь с таким телефоном уже существует', 'error');
-                return;
-            }
-
-            const newUser = {
-                id: Date.now(),
-                fullName: fullName,
-                phone: phone,
-                email: email,
-                password: password,
-                createdAt: new Date().toISOString()
-            };
-
+            if (users.find(u => u.phone === phone)) { showToast('Пользователь уже существует', 'error'); return; }
+            const newUser = { id: Date.now(), fullName, phone, email, password, role: isAdmin ? 'admin' : 'client', entityType: entityType, createdAt: new Date().toISOString() };
             users.push(newUser);
             localStorage.setItem('sibavto_users', JSON.stringify(users));
-
-            localStorage.setItem('sibavto_current_user', JSON.stringify({
-                id: newUser.id,
-                fullName: newUser.fullName,
-                phone: newUser.phone,
-                email: newUser.email
-            }));
-
+            localStorage.setItem('sibavto_current_user', JSON.stringify({ id: newUser.id, fullName: newUser.fullName, phone: newUser.phone, email: newUser.email, role: newUser.role, entityType: newUser.entityType }));
             showToast('Регистрация успешна!', 'success');
             setTimeout(() => window.location.href = 'profile.html', 800);
         });
     }
-        // ============ ВЫПАДАЮЩЕЕ МЕНЮ ПРОФИЛЯ ============
-    const userMenuBtn = document.getElementById('userMenuBtn');
-    const userMenu = document.querySelector('.user-menu');
 
-    if (userMenuBtn) {
-        userMenuBtn.addEventListener('click', function (e) {
-            e.stopPropagation();
-            userMenu.classList.toggle('user-menu--open');
-        });
-
-        document.addEventListener('click', function () {
-            userMenu.classList.remove('user-menu--open');
+    // ПОДПИСКА
+    const subscribeForm = document.getElementById('subscribeForm');
+    if (subscribeForm) {
+        subscribeForm.addEventListener('submit', function (e) {
+            e.preventDefault();
+            const email = this.querySelector('input').value.trim();
+            if (!email || !email.includes('@')) { showToast('Введите корректный email', 'error'); return; }
+            const subscribers = JSON.parse(localStorage.getItem('sibavto_subscribers') || '[]');
+            if (subscribers.includes(email)) { showToast('Вы уже подписаны!', 'error'); return; }
+            subscribers.push(email);
+            localStorage.setItem('sibavto_subscribers', JSON.stringify(subscribers));
+            showToast('Спасибо за подписку!', 'success');
+            this.reset();
         });
     }
-
-});   
+});

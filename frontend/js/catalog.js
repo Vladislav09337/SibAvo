@@ -38,7 +38,13 @@ document.addEventListener('DOMContentLoaded', function () {
         const existingIndex = favorites.findIndex(f => f.article === product.article);
 
         if (existingIndex === -1) {
-            favorites.push(product);
+            favorites.push({
+                id: product.id,
+                name: product.name,
+                article: product.article,
+                price: product.price,
+                image: product.image || 'https://via.placeholder.com/400x300/cccccc/ffffff?text=No+Image'
+            });
             showToast('Добавлено в избранное', 'success');
         } else {
             favorites.splice(existingIndex, 1);
@@ -46,29 +52,66 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         localStorage.setItem('sibavto_favorites_' + user.id, JSON.stringify(favorites));
-
-        const card = document.querySelector('.product__card[data-article="' + product.article + '"]');
-        if (card) {
-            const btn = card.querySelector('.favorite-btn');
-            if (btn) {
-                const fav = isFavorite(product.article);
-                btn.textContent = fav ? '★' : '☆';
-                btn.classList.toggle('favorite-btn--active', fav);
-            }
-        }
-
         updateFavoritesHeaderCount();
     }
 
     function updateFavoritesHeaderCount() {
         const favorites = getFavorites();
         const count = favorites.length;
+
         document.querySelectorAll('.header__favorites').forEach(el => {
             el.textContent = 'Избранное' + (count > 0 ? ' (' + count + ')' : '');
         });
+
+        const badge = document.getElementById('favoritesBadge');
+        if (badge) {
+            badge.textContent = count;
+        }
     }
 
-    // ============ ПОЛУЧИТЬ ФИЛЬТРЫ ============
+    // ============ СРАВНЕНИЕ ============
+    function getCompare() {
+        return JSON.parse(localStorage.getItem('sibavto_compare') || '[]');
+    }
+
+    function saveCompare(ids) {
+        localStorage.setItem('sibavto_compare', JSON.stringify(ids));
+        updateCompareBadge();
+    }
+
+    function updateCompareBadge() {
+        const count = getCompare().length;
+        const badge = document.getElementById('compareBadge');
+        if (badge) {
+            badge.textContent = count;
+        }
+    }
+
+    function toggleCompare(id) {
+        const compare = getCompare();
+        const existingIndex = compare.indexOf(id);
+
+        if (existingIndex === -1) {
+            if (compare.length >= 4) {
+                showToast('Можно сравнить не более 4 товаров', 'error');
+                return;
+            }
+            compare.push(id);
+            showToast('Добавлено в сравнение', 'success');
+        } else {
+            compare.splice(existingIndex, 1);
+            showToast('Удалено из сравнения', 'success');
+        }
+
+        saveCompare(compare);
+        updateCatalog();
+    }
+
+    function isInCompare(id) {
+        return getCompare().includes(id);
+    }
+
+    // ============ ФИЛЬТРЫ ============
     function getFilters() {
         const carEl = document.querySelector('select[data-filter="car"]');
         const priceMinEl = document.querySelector('input[data-filter="price-min"]');
@@ -96,39 +139,41 @@ document.addEventListener('DOMContentLoaded', function () {
         return filters;
     }
 
-    // ============ ПРИМЕНИТЬ ФИЛЬТРЫ ============
+    // ============ ПРИМЕНЕНИЕ ФИЛЬТРОВ ============
     function applyFilters(products, filters) {
         return products.filter(p => {
-            if (filters.brand && p.brand !== filters.brand) return false;
+            // Марка авто — из URL (?brand=toyota)
+            if (filters.brand && filters.brand !== 'all') {
+                if (p.car !== 'все' && p.car.toLowerCase() !== filters.brand.toLowerCase()) return false;
+            }
 
+            // Марка авто — из селекта
             if (filters.car && filters.car !== 'all' && p.car !== filters.car && p.car !== 'все') return false;
 
+            // Категория
             if (filters.category.length > 0 && !filters.category.includes(p.category)) return false;
 
+            // Наличие
             if (filters.status.length > 0 && !filters.status.includes(p.status)) return false;
 
+            // Цена
             if (p.price < filters.priceMin || p.price > filters.priceMax) return false;
 
             return true;
         });
     }
 
-    // ============ СОРТИРОВКА ============
     function sortProducts(products, sort) {
         const sorted = [...products];
         switch (sort) {
-            case 'price-asc':
-                return sorted.sort((a, b) => a.price - b.price);
-            case 'price-desc':
-                return sorted.sort((a, b) => b.price - a.price);
-            case 'name':
-                return sorted.sort((a, b) => a.name.localeCompare(b.name));
-            default:
-                return sorted;
+            case 'price-asc': return sorted.sort((a, b) => a.price - b.price);
+            case 'price-desc': return sorted.sort((a, b) => b.price - a.price);
+            case 'name': return sorted.sort((a, b) => a.name.localeCompare(b.name));
+            default: return sorted;
         }
     }
 
-    // ============ ОТРИСОВКА ТОВАРОВ ============
+    // ============ ОТРИСОВКА ============
     function renderProducts(products) {
         if (products.length === 0) {
             productsGrid.innerHTML = `
@@ -144,30 +189,43 @@ document.addEventListener('DOMContentLoaded', function () {
         productsGrid.innerHTML = products.map(p => {
             const isHighlighted = highlightArticle && p.article.toLowerCase() === highlightArticle.toLowerCase();
             const fav = isFavorite(p.article);
-            const favClass = fav ? 'favorite-btn favorite-btn--active' : 'favorite-btn';
-            const favIcon = fav ? '★' : '☆';
+            const inCompare = isInCompare(p.id);
+            const imageUrl = (p.images && p.images.length > 0)
+                ? p.images[0]
+                : 'https://via.placeholder.com/400x300/cccccc/ffffff?text=No+Image';
 
             return `
                 <div class="product__card ${isHighlighted ? 'product__card--highlight' : ''}" 
                      data-id="${p.id}" 
                      data-article="${p.article}"
                      id="product-${p.id}">
-                    <button class="${favClass}" 
-                            data-article="${p.article}" 
-                            data-id="${p.id}"
-                            title="${fav ? 'Удалить из избранного' : 'Добавить в избранное'}">
-                        ${favIcon}
-                    </button>
                     <a href="product.html?id=${p.id}" class="product__link">
-                        <div class="product__image">■</div>
+                        <div class="product__image-wrapper">
+                            <img src="${imageUrl}" alt="${p.name}" class="product__image-img" loading="lazy" onerror="this.src='https://via.placeholder.com/400x300/cccccc/ffffff?text=No+Image'">
+                        </div>
                         <h3 class="product__name">${p.name}</h3>
                         <p class="product__article">Артикул: ${p.article}</p>
                     </a>
                     <p class="product__price">${p.price.toLocaleString('ru-RU')} руб.</p>
-                    <span class="product__status product__status--${p.status === 'in_stock' ? 'in' : 'order'}">
-                        ${p.status === 'in_stock' ? 'В наличии' : 'Под заказ'}
-                    </span>
-                    <button class="btn btn--primary btn--small add-to-cart" data-id="${p.id}">В корзину</button>
+                    <div class="product__status-row">
+                        <span class="product__status product__status--${p.status === 'in_stock' ? 'in' : 'order'}">
+                            ${p.status === 'in_stock' ? 'В наличии' : 'Под заказ'}
+                        </span>
+                        <button class="favorite-btn-heart ${fav ? 'favorite-btn-heart--active' : ''}" 
+                                data-article="${p.article}" 
+                                data-id="${p.id}"
+                                title="${fav ? 'Удалить из избранного' : 'Добавить в избранное'}">
+                            ${fav ? '❤' : '♡'}
+                        </button>
+                    </div>
+                    <div class="product__actions-buttons">
+                        <button class="btn btn--primary btn--small add-to-cart" data-id="${p.id}">В корзину</button>
+                        <button class="compare-btn ${inCompare ? 'compare-btn--active' : ''}" 
+                                data-id="${p.id}" 
+                                title="${inCompare ? 'Убрать из сравнения' : 'Сравнить'}">
+                            ${inCompare ? '✔' : '⚖'}
+                        </button>
+                    </div>
                 </div>
             `;
         }).join('');
@@ -176,25 +234,22 @@ document.addEventListener('DOMContentLoaded', function () {
             catalogCount.textContent = 'Найдено: ' + products.length + ' товаров';
         }
 
-        // Обработчики: "В корзину"
+        // В корзину
         productsGrid.querySelectorAll('.add-to-cart').forEach(btn => {
             btn.addEventListener('click', function (e) {
                 e.preventDefault();
                 e.stopPropagation();
-                const id = parseInt(this.dataset.id);
-                addToCartById(id);
+                addToCartById(parseInt(this.dataset.id));
             });
         });
 
-        // Обработчики: "Избранное"
-        productsGrid.querySelectorAll('.favorite-btn').forEach(btn => {
+        // Сердце
+        productsGrid.querySelectorAll('.favorite-btn-heart').forEach(btn => {
             btn.addEventListener('click', function (e) {
                 e.preventDefault();
                 e.stopPropagation();
 
-                const article = this.dataset.article;
                 const id = parseInt(this.dataset.id);
-
                 const product = window.SIBAVTO_PRODUCTS.find(p => p.id === id);
                 if (!product) return;
 
@@ -202,8 +257,22 @@ document.addEventListener('DOMContentLoaded', function () {
                     id: product.id,
                     name: product.name,
                     article: product.article,
-                    price: product.price
+                    price: product.price,
+                    image: product.images ? product.images[0] : ''
                 });
+
+                const isFav = isFavorite(product.article);
+                this.textContent = isFav ? '❤' : '♡';
+                this.classList.toggle('favorite-btn-heart--active', isFav);
+            });
+        });
+
+        // Сравнение
+        productsGrid.querySelectorAll('.compare-btn').forEach(btn => {
+            btn.addEventListener('click', function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+                toggleCompare(parseInt(this.dataset.id));
             });
         });
 
@@ -211,30 +280,14 @@ document.addEventListener('DOMContentLoaded', function () {
         if (highlightArticle) {
             setTimeout(() => {
                 const targetCard = productsGrid.querySelector('.product__card--highlight');
-
                 if (targetCard) {
                     targetCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
-
                     if (typeof showToast === 'function') {
                         showToast('Найден товар: ' + highlightArticle, 'success');
                     }
-
                     setTimeout(() => {
                         targetCard.classList.remove('product__card--highlight');
                     }, 5000);
-                } else {
-                    const foundProduct = window.SIBAVTO_PRODUCTS.find(
-                        p => p.article.toLowerCase() === highlightArticle.toLowerCase()
-                    );
-
-                    if (foundProduct) {
-                        document.querySelectorAll('.filters input[type="checkbox"]').forEach(cb => cb.checked = false);
-                        document.querySelectorAll('.filters select').forEach(sel => sel.selectedIndex = 0);
-                        document.querySelectorAll('.filters input[type="number"]').forEach(inp => inp.value = '');
-
-                        const allProducts = sortProducts(window.SIBAVTO_PRODUCTS, 'popular');
-                        renderProducts(allProducts);
-                    }
                 }
             }, 200);
         }
@@ -242,11 +295,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // ============ ДОБАВИТЬ В КОРЗИНУ ============
     function addToCartById(id) {
+        if (typeof requireAuthForCart === 'function' && !requireAuthForCart()) return;
+
         const product = window.SIBAVTO_PRODUCTS.find(p => p.id === id);
         if (!product) return;
 
         const cart = JSON.parse(localStorage.getItem('sibavto_cart') || '[]');
         const existing = cart.find(item => item.article === product.article);
+        
 
         if (existing) {
             existing.quantity++;
@@ -261,6 +317,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
         localStorage.setItem('sibavto_cart', JSON.stringify(cart));
 
+        const cartBadge = document.getElementById('cartBadge');
+        if (cartBadge) {
+            const total = cart.reduce((sum, item) => sum + item.quantity, 0);
+            cartBadge.textContent = total;
+        }
+
         if (typeof updateCartCount === 'function') {
             updateCartCount();
         }
@@ -270,7 +332,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    // ============ ЗАГОЛОВОК ПРИ ФИЛЬТРЕ ПО БРЕНДУ ============
+    // ============ ЗАГОЛОВОК ============
     function updateTitle() {
         if (!pageTitle) return;
 
@@ -338,5 +400,6 @@ document.addEventListener('DOMContentLoaded', function () {
     // ============ СТАРТ ============
     updateTitle();
     updateFavoritesHeaderCount();
+    updateCompareBadge();
     updateCatalog();
 });

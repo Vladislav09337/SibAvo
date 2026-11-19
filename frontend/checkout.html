@@ -3,58 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="robots" content="noindex, nofollow">
     <meta name="description" content="Оформление заказа SibAvto.">
+    <meta name="robots" content="noindex, nofollow">
     <title>Оформление заказа — SibAvto</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
     <header class="header">
-    <div class="container header__inner">
-        <a href="index.html" class="logo"><span class="logo__text">Sib<span>Avto</span></span></a>
-        <nav class="nav">
-            <a href="index.html" class="nav__link">Главная</a>
-            <a href="catalog.html" class="nav__link">Каталог</a>
-            <a href="employees.html" class="nav__link">Сотрудники</a>
-            <a href="about.html" class="nav__link">О компании</a>
-            <a href="contacts.html" class="nav__link">Контакты</a>
-            <a href="integrations.html" class="nav__link">Интеграции</a>
-        </nav>
-        <div class="user-menu">
-            <button class="user-menu__btn" id="userMenuBtn">
-                <span class="user-menu__avatar">👤</span>
-                <span class="user-menu__name">Профиль</span>
-                <span class="user-menu__arrow">▾</span>
-            </button>
-            <div class="user-menu__dropdown" id="userDropdown">
-                <a href="profile.html" class="user-menu__item">
-                    <span>👤</span> Мой профиль
-                </a>
-                <a href="profile.html#favorites" class="user-menu__item">
-                    <span>★</span> Избранное
-                    <span class="user-menu__badge" id="favoritesBadge">0</span>
-                </a>
-                <a href="compare.html" class="user-menu__item">
-                    <span>⚖</span> Сравнение
-                    <span class="user-menu__badge" id="compareBadge">0</span>
-                </a>
-                <a href="cart.html" class="user-menu__item">
-                    <span>🛒</span> Корзина
-                    <span class="user-menu__badge" id="cartBadge">0</span>
-                </a>
-                <div class="user-menu__divider"></div>
-                <a href="login.html" class="user-menu__item user-menu__item--login">
-                    <span>🔓</span> Войти / Регистрация
-                </a>
+        <div class="container header__inner">
+            <a href="index.html" class="logo"><span class="logo__text">Sib<span>Avto</span></span></a>
+            <nav class="nav">
+                <a href="index.html" class="nav__link">Главная</a>
+                <a href="catalog.html" class="nav__link">Каталог</a>
+                <a href="employees.html" class="nav__link">Сотрудники</a>
+                <a href="about.html" class="nav__link">О компании</a>
+                <a href="contacts.html" class="nav__link">Контакты</a>
+                <a href="integrations.html" class="nav__link">Интеграции</a>
+            </nav>
+            <div class="user-menu">
+                <button class="user-menu__btn" id="userMenuBtn">
+                    <span class="user-menu__avatar">👤</span>
+                    <span class="user-menu__name">Профиль</span>
+                    <span class="user-menu__arrow">▾</span>
+                </button>
+                <div class="user-menu__dropdown" id="userDropdown">
+                    <a href="profile.html" class="user-menu__item"><span>👤</span> Мой профиль</a>
+                    <a href="profile.html#favorites" class="user-menu__item"><span>★</span> Избранное <span class="user-menu__badge" id="favoritesBadge">0</span></a>
+                    <a href="compare.html" class="user-menu__item"><span>⚖</span> Сравнение <span class="user-menu__badge" id="compareBadge">0</span></a>
+                    <a href="cart.html" class="user-menu__item"><span>🛒</span> Корзина <span class="user-menu__badge" id="cartBadge">0</span></a>
+                    <div class="user-menu__divider"></div>
+                    <a href="login.html" class="user-menu__item user-menu__item--login"><span>🔓</span> Войти / Регистрация</a>
+                </div>
             </div>
         </div>
-    </div>
-</header>
+    </header>
 
     <main class="checkout">
         <div class="container">
             <h1 class="page__title">Оформление заказа</h1>
+
             <form class="checkout__form" id="checkoutForm">
+                <!-- КОНТАКТЫ -->
                 <section class="checkout__section">
                     <h2>Контактные данные</h2>
                     <div class="form__row">
@@ -64,6 +53,7 @@
                     <input type="email" id="customerEmail" placeholder="E-mail" required>
                 </section>
 
+                <!-- ДОСТАВКА -->
                 <section class="checkout__section">
                     <h2>Доставка</h2>
                     <label class="radio">
@@ -79,38 +69,107 @@
                         <h3 style="font-size: 16px; margin-bottom: 12px; color: #1a2332;">Выберите адрес доставки</h3>
                         <div id="savedAddressesList"></div>
                         <div style="margin-top: 12px;">
-                            <a href="profile.html#addresses" class="btn btn--outline btn--small" style="color: #1a2332; border-color: #1a2332;">
-                                + Добавить новый адрес
-                            </a>
+                            <a href="profile.html#addresses" class="btn btn--outline btn--small" style="color: #1a2332; border-color: #1a2332;">+ Добавить новый адрес в профиль</a>
                         </div>
                         <div style="margin-top: 16px;">
-                            <label style="display: block; font-size: 14px; color: #555; margin-bottom: 6px;">
-                                Или введите адрес вручную:
-                            </label>
+                            <label style="display: block; font-size: 14px; color: #555; margin-bottom: 6px;">Или введите адрес вручную (он сохранится в профиль):</label>
                             <input type="text" id="manualAddress" placeholder="Город, улица, дом, квартира">
                         </div>
                     </div>
                 </section>
 
+                <!-- КАРТА ЯНДЕКС -->
                 <section class="checkout__section">
-                    <h2>Оплата</h2>
-                    <label class="radio">
-                        <input type="radio" name="payment" value="online" checked>
-                        <span>Онлайн оплата картой</span>
-                    </label>
-                    <label class="radio">
-                        <input type="radio" name="payment" value="cash">
-                        <span>Наличными при получении</span>
-                    </label>
-                    <label class="radio">
-                        <input type="radio" name="payment" value="card">
-                        <span>Картой при получении</span>
-                    </label>
+                    <h2>📍 Наш магазин на карте</h2>
+                    <div class="checkout__map">
+                        <iframe 
+                            src="https://yandex.ru/map-widget/v1/?ll=82.920430%2C55.030199&z=16&pt=82.920430,55.030199,pm2rdm"
+                            width="100%" 
+                            height="400" 
+                            frameborder="0"
+                            allowfullscreen="true"
+                            style="border-radius: 8px;">
+                        </iframe>
+                    </div>
+                    <p style="margin-top: 12px; font-size: 14px; color: #666;">
+                        <strong>Адрес:</strong> г. Новосибирск, ул. Автозаводская, 15<br>
+                        <strong>Режим работы:</strong> Пн-Пт 9:00-19:00, Сб 10:00-17:00, Вс выходной
+                    </p>
                 </section>
 
+                <!-- ОПЛАТА -->
                 <section class="checkout__section">
-                    <h2>Комментарий</h2>
-                    <textarea id="orderComment" placeholder="Комментарий к заказу (необязательно)"></textarea>
+                    <h2>Оплата</h2>
+
+                    <label class="radio">
+                        <input type="radio" name="payment" value="card" checked onchange="togglePayment('card')">
+                        <span>💳 Банковской картой онлайн</span>
+                    </label>
+
+                    <div id="cardForm" class="payment-card-form">
+                        <div class="payment-card-preview">
+                            <div class="payment-card-chip">💳</div>
+                            <div class="payment-card-number" id="cardPreviewNumber">•••• •••• •••• ••••</div>
+                            <div class="payment-card-info">
+                                <span id="cardPreviewName">ИМЯ ДЕРЖАТЕЛЯ</span>
+                                <span id="cardPreviewExpiry">MM/YY</span>
+                            </div>
+                        </div>
+                        <div class="form__row">
+                            <input type="text" id="cardNumber" placeholder="Номер карты" maxlength="19" required>
+                            <input type="text" id="cardHolder" placeholder="Имя держателя" required>
+                        </div>
+                        <div class="form__row">
+                            <input type="text" id="cardExpiry" placeholder="MM/YY" maxlength="5" required>
+                            <input type="text" id="cardCvv" placeholder="CVV" maxlength="3" type="password" required>
+                        </div>
+                    </div>
+
+                    <label class="radio">
+                        <input type="radio" name="payment" value="sbp" onchange="togglePayment('sbp')">
+                        <span>📱 СБП (Система быстрых платежей)</span>
+                    </label>
+                    <div id="sbpBlock" class="payment-sbp" style="display: none;">
+                        <p style="margin-bottom: 16px; color: #555;">Отсканируйте QR-код в приложении вашего банка:</p>
+                        <div class="payment-sbp-qr">
+                            <img src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=https://sibavto.ru/pay/order" alt="QR-код для оплаты" style="border-radius: 8px;">
+                        </div>
+                        <p style="margin-top: 16px; font-size: 13px; color: #888;">Или перейдите по ссылке в приложении банка: <br><a href="#" style="color: #e63946;">sibavto.ru/pay/order</a></p>
+                    </div>
+
+                    <label class="radio">
+                        <input type="radio" name="payment" value="cash" onchange="togglePayment('cash')">
+                        <span>💵 Наличными при получении</span>
+                    </label>
+
+                    <label class="radio">
+                        <input type="radio" name="payment" value="card_on_delivery" onchange="togglePayment('card_on_delivery')">
+                        <span>💳 Картой при получении</span>
+                    </label>
+
+                    <!-- Оплата по счету (только для юр. лиц) -->
+                    <label class="radio" id="paymentInvoiceLabel" style="display: none;">
+                        <input type="radio" name="payment" value="invoice" onchange="togglePayment('invoice')">
+                        <span>🧾 Оплата по счету (для юр. лиц)</span>
+                    </label>
+                </section>
+                 <section class="checkout__section" id="bonusesSection" style="display: none;">
+                    <h2>🎁 Бонусы</h2>
+                    <div style="display: flex; align-items: center; justify-content: space-between; background: #fff8e1; padding: 16px; border-radius: 8px; border: 1px solid #ffc107;">
+                        <div>
+                            <p style="font-size: 14px; color: #856404; margin-bottom: 4px;">Доступно бонусов:</p>
+                            <strong style="font-size: 20px; color: #1a2332;"><span id="availableBonuses">0</span> руб.</strong>
+                        </div>
+                        <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-weight: 600; color: #1a2332;">
+                            <input type="checkbox" id="useBonuses" style="width: 20px; height: 20px; accent-color: #e63946;">
+                            Списать все
+                        </label>
+                    </div>
+                </section>
+                <!-- КОММЕНТАРИЙ -->
+                <section class="checkout__section">
+                    <h2>Комментарий к заказу</h2>
+                    <textarea id="orderComment" placeholder="Комментарий (необязательно)"></textarea>
                 </section>
 
                 <button type="submit" class="btn btn--primary btn--large btn--full">Подтвердить заказ</button>
@@ -118,168 +177,37 @@
         </div>
     </main>
 
-<footer class="footer">
-    <div class="container footer__inner">
-        <div class="footer__col">
-            <h4>SibAvto</h4>
-            <p>Лицензированный продавец автозапчастей</p>
-            <p>Лицензия № 54-АА-123456 от 01.01.2020</p>
+    <footer class="footer">
+        <div class="footer__bg"></div>
+        <div class="container footer__content">
+            <div class="footer__main">
+                <div class="footer__col">
+                    <a href="index.html" class="footer__logo">Sib<span>Avto</span></a>
+                    <p class="footer__desc">Лицензированный продавец автозапчастей.</p>
+                </div>
+                <div class="footer__col">
+                    <h4>Разделы</h4>
+                    <a href="catalog.html">Каталог</a>
+                    <a href="about.html">О компании</a>
+                    <a href="contacts.html">Контакты</a>
+                </div>
+                <div class="footer__col">
+                    <h4>Помощь</h4>
+                    <a href="delivery.html">Доставка и оплата</a>
+                    <a href="warranty.html">Гарантия</a>
+                    <a href="faq.html">FAQ</a>
+                </div>
+                <div class="footer__col">
+                    <h4>Контакты</h4>
+                    <a href="tel:+73831234567" class="footer__phone">+7 (383) 123-45-67</a>
+                    <p>info@sibavto.ru</p>
+                </div>
+            </div>
         </div>
-        <div class="footer__col">
-            <h4>Разделы</h4>
-            <a href="catalog.html">Каталог</a>
-            <a href="employees.html">Сотрудники</a>
-            <a href="about.html">О компании</a>
-            <a href="contacts.html">Контакты</a>
-        </div>
-        <div class="footer__col">
-            <h4>Помощь</h4>
-            <a href="delivery.html">Доставка и оплата</a>
-            <a href="warranty.html">Гарантия и возврат</a>
-            <a href="faq.html">Частые вопросы</a>
-        </div>
-        <div class="footer__col">
-            <h4>Контакты</h4>
-            <p>+7 (383) 123-45-67</p>
-            <p>info@sibavto.ru</p>
-            <p>г. Новосибирск, ул. Автозаводская, 15</p>
-        </div>
-    </div>
-    <div class="footer__bottom">
-        <p>2026 SibAvto. Все права защищены.</p>
-    </div>
-</footer>
+    </footer>
 
     <script src="js/main.js"></script>
-    <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const currentUser = JSON.parse(localStorage.getItem('sibavto_current_user') || 'null');
-
-        // ============ АВТОЗАПОЛНЕНИЕ КОНТАКТОВ ============
-        if (currentUser) {
-            document.getElementById('customerName').value = currentUser.fullName || '';
-            document.getElementById('customerPhone').value = currentUser.phone || '';
-            document.getElementById('customerEmail').value = currentUser.email || '';
-        }
-
-        // ============ ПОКАЗ АДРЕСОВ ПРИ ВЫБОРЕ "КУРЬЕР" ============
-        const addressBlock = document.getElementById('addressBlock');
-        const savedAddressesList = document.getElementById('savedAddressesList');
-
-        document.querySelectorAll('input[name="delivery"]').forEach(radio => {
-            radio.addEventListener('change', function () {
-                addressBlock.style.display = this.value === 'courier' ? 'block' : 'none';
-                if (this.value === 'courier') renderSavedAddresses();
-            });
-        });
-
-        // ============ ОТРИСОВКА СОХРАНЁННЫХ АДРЕСОВ ============
-        function renderSavedAddresses() {
-            if (!currentUser) {
-                savedAddressesList.innerHTML = '<p style="color: #888; font-size: 14px;">Войдите в аккаунт, чтобы использовать сохранённые адреса</p>';
-                return;
-            }
-
-            const addresses = JSON.parse(localStorage.getItem('sibavto_addresses_' + currentUser.id) || '[]');
-
-            if (addresses.length === 0) {
-                savedAddressesList.innerHTML = '<p style="color: #888; font-size: 14px;">У вас нет сохранённых адресов</p>';
-                return;
-            }
-
-            savedAddressesList.innerHTML = addresses.map((addr, i) => `
-                <label class="address__option">
-                    <input type="radio" name="savedAddress" value="${i}">
-                    <div>
-                        <strong>${addr.label}</strong>
-                        <p>${addr.fullAddress}</p>
-                        ${addr.comment ? `<p style="font-size: 12px; color: #888;">${addr.comment}</p>` : ''}
-                    </div>
-                </label>
-            `).join('');
-        }
-
-        // ============ ВЫБОР АДРЕСА ИЗ ПРОФИЛЯ (если есть) ============
-        const selectedAddress = JSON.parse(localStorage.getItem('sibavto_selected_address') || 'null');
-        if (selectedAddress) {
-            document.querySelector('input[name="delivery"][value="courier"]').checked = true;
-            addressBlock.style.display = 'block';
-            renderSavedAddresses();
-
-            setTimeout(() => {
-                const manual = document.getElementById('manualAddress');
-                if (manual) manual.value = selectedAddress.fullAddress;
-                localStorage.removeItem('sibavto_selected_address');
-            }, 100);
-        }
-
-        // ============ ОТПРАВКА ЗАКАЗА ============
-        document.getElementById('checkoutForm').addEventListener('submit', function (e) {
-            e.preventDefault();
-
-            const cart = JSON.parse(localStorage.getItem('sibavto_cart') || '[]');
-            if (cart.length === 0) {
-                showToast('Корзина пуста', 'error');
-                return;
-            }
-
-            const delivery = document.querySelector('input[name="delivery"]:checked').value;
-            const payment = document.querySelector('input[name="payment"]:checked').value;
-            const comment = document.getElementById('orderComment').value.trim();
-
-            // Определяем адрес
-            let address = null;
-            if (delivery === 'courier') {
-                const selectedSaved = document.querySelector('input[name="savedAddress"]:checked');
-                const manual = document.getElementById('manualAddress').value.trim();
-
-                if (selectedSaved && currentUser) {
-                    const addresses = JSON.parse(localStorage.getItem('sibavto_addresses_' + currentUser.id) || '[]');
-                    address = addresses[parseInt(selectedSaved.value)].fullAddress;
-                } else if (manual) {
-                    address = manual;
-                } else {
-                    showToast('Выберите или введите адрес доставки', 'error');
-                    return;
-                }
-            }
-
-            const orderNumber = '2026-' + Math.floor(1000 + Math.random() * 9000);
-            const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
-
-            const order = {
-                number: orderNumber,
-                items: cart,
-                total: total,
-                status: 'new',
-                deliveryMethod: delivery,
-                address: address,
-                paymentMethod: payment,
-                comment: comment,
-                createdAt: new Date().toISOString()
-            };
-
-            if (currentUser) {
-                const ordersKey = 'sibavto_orders_' + currentUser.id;
-                const orders = JSON.parse(localStorage.getItem(ordersKey) || '[]');
-                orders.unshift(order);
-                localStorage.setItem(ordersKey, JSON.stringify(orders));
-            }
-
-            localStorage.removeItem('sibavto_cart');
-
-            showToast('Заказ №' + orderNumber + ' оформлен!', 'success');
-
-            setTimeout(() => {
-                if (currentUser) {
-                    window.location.href = 'profile.html';
-                } else {
-                    window.location.href = 'index.html';
-                }
-            }, 2000);
-        });
-    });
-    </script>
+    <script src="js/checkout.js"></script>
     <script src="js/chat-bot.js"></script>
 </body>
 </html>

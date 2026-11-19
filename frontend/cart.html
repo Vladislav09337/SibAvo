@@ -3,110 +3,120 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Корзина SibAvto — оформление заказа автозапчастей.">
     <meta name="robots" content="noindex, nofollow">
-    <meta name="description" content="Корзина SibAvto.">
     <title>Корзина — SibAvto</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
     <header class="header">
-    <div class="container header__inner">
-        <a href="index.html" class="logo"><span class="logo__text">Sib<span>Avto</span></span></a>
-        <nav class="nav">
-            <a href="index.html" class="nav__link">Главная</a>
-            <a href="catalog.html" class="nav__link">Каталог</a>
-            <a href="employees.html" class="nav__link">Сотрудники</a>
-            <a href="about.html" class="nav__link">О компании</a>
-            <a href="contacts.html" class="nav__link">Контакты</a>
-            <a href="integrations.html" class="nav__link">Интеграции</a>
-        </nav>
-        <div class="user-menu">
-            <button class="user-menu__btn" id="userMenuBtn">
-                <span class="user-menu__avatar">👤</span>
-                <span class="user-menu__name">Профиль</span>
-                <span class="user-menu__arrow">▾</span>
-            </button>
-            <div class="user-menu__dropdown" id="userDropdown">
-                <a href="profile.html" class="user-menu__item">
-                    <span>👤</span> Мой профиль
-                </a>
-                <a href="profile.html#favorites" class="user-menu__item">
-                    <span>★</span> Избранное
-                    <span class="user-menu__badge" id="favoritesBadge">0</span>
-                </a>
-                <a href="compare.html" class="user-menu__item">
-                    <span>⚖</span> Сравнение
-                    <span class="user-menu__badge" id="compareBadge">0</span>
-                </a>
-                <a href="cart.html" class="user-menu__item">
-                    <span>🛒</span> Корзина
-                    <span class="user-menu__badge" id="cartBadge">0</span>
-                </a>
-                <div class="user-menu__divider"></div>
-                <a href="login.html" class="user-menu__item user-menu__item--login">
-                    <span>🔓</span> Войти / Регистрация
-                </a>
+        <div class="container header__inner">
+            <a href="index.html" class="logo"><span class="logo__text">Sib<span>Avto</span></span></a>
+            <nav class="nav">
+                <a href="index.html" class="nav__link">Главная</a>
+                <a href="catalog.html" class="nav__link">Каталог</a>
+                <a href="employees.html" class="nav__link">Сотрудники</a>
+                <a href="about.html" class="nav__link">О компании</a>
+                <a href="contacts.html" class="nav__link">Контакты</a>
+                <a href="integrations.html" class="nav__link">Интеграции</a>
+            </nav>
+            <div class="user-menu">
+                <button class="user-menu__btn" id="userMenuBtn">
+                    <span class="user-menu__avatar">👤</span>
+                    <span class="user-menu__name">Профиль</span>
+                    <span class="user-menu__arrow">▾</span>
+                </button>
+                <div class="user-menu__dropdown" id="userDropdown">
+                    <a href="profile.html" class="user-menu__item"><span>👤</span> Мой профиль</a>
+                    <a href="profile.html#favorites" class="user-menu__item"><span>★</span> Избранное <span class="user-menu__badge" id="favoritesBadge">0</span></a>
+                    <a href="compare.html" class="user-menu__item"><span>⚖</span> Сравнение <span class="user-menu__badge" id="compareBadge">0</span></a>
+                    <a href="cart.html" class="user-menu__item"><span>🛒</span> Корзина <span class="user-menu__badge" id="cartBadge">0</span></a>
+                    <div class="user-menu__divider"></div>
+                    <a href="login.html" class="user-menu__item user-menu__item--login"><span>🔓</span> Войти / Регистрация</a>
+                </div>
             </div>
         </div>
-    </div>
-</header>
+    </header>
 
     <main class="cart">
         <div class="container">
             <h1 class="page__title">Корзина</h1>
             <div class="cart__layout">
                 <div class="cart__items"></div>
+
                 <aside class="cart__summary">
                     <h2>Итого</h2>
                     <div class="cart__row">
-                        <span>Товары (0 шт.)</span>
-                        <span>0 руб.</span>
+                        <span>Товары (<span id="cartCount">0</span> шт.)</span>
+                        <span id="cartSubtotal">0 руб.</span>
                     </div>
+
+                    <div class="cart__delivery">
+                        <h3>Способ доставки</h3>
+                        <label class="cart__delivery-option">
+                            <input type="radio" name="deliveryMethod" value="pickup" checked>
+                            <span>Самовывоз (бесплатно)</span>
+                        </label>
+                        <label class="cart__delivery-option">
+                            <input type="radio" name="deliveryMethod" value="courier">
+                            <span>Курьер по Новосибирску (300 ₽, бесплатно от 5000 ₽)</span>
+                        </label>
+                        <label class="cart__delivery-option">
+                            <input type="radio" name="deliveryMethod" value="post">
+                            <span>Почта / СДЭК (от 500 ₽)</span>
+                        </label>
+                    </div>
+
                     <div class="cart__row">
                         <span>Доставка</span>
-                        <span>—</span>
+                        <span id="cartDelivery">—</span>
                     </div>
+
                     <div class="cart__row cart__row--total">
                         <span>Итого к оплате</span>
-                        <span>0 руб.</span>
+                        <span id="cartTotal">0 руб.</span>
                     </div>
+
                     <a href="checkout.html" class="btn btn--primary btn--full">Оформить заказ</a>
                 </aside>
             </div>
         </div>
     </main>
 
-<footer class="footer">
-    <div class="container footer__inner">
-        <div class="footer__col">
-            <h4>SibAvto</h4>
-            <p>Лицензированный продавец автозапчастей</p>
-            <p>Лицензия № 54-АА-123456 от 01.01.2020</p>
+    <footer class="footer">
+        <div class="footer__bg"></div>
+        <div class="container footer__content">
+            <div class="footer__main">
+                <div class="footer__col">
+                    <a href="index.html" class="footer__logo">Sib<span>Avto</span></a>
+                    <p class="footer__desc">Лицензированный продавец автозапчастей.</p>
+                </div>
+                <div class="footer__col">
+                    <h4>Разделы</h4>
+                    <a href="catalog.html">Каталог</a>
+                    <a href="about.html">О компании</a>
+                    <a href="contacts.html">Контакты</a>
+                </div>
+                <div class="footer__col">
+                    <h4>Помощь</h4>
+                    <a href="delivery.html">Доставка и оплата</a>
+                    <a href="warranty.html">Гарантия</a>
+                    <a href="faq.html">FAQ</a>
+                    <a href="info.html">Информация</a>
+                </div>
+                <div class="footer__col">
+                    <h4>Контакты</h4>
+                    <a href="tel:+73831234567" class="footer__phone">+7 (383) 123-45-67</a>
+                    <p>info@sibavto.ru</p>
+                </div>
+            </div>
         </div>
-        <div class="footer__col">
-            <h4>Разделы</h4>
-            <a href="catalog.html">Каталог</a>
-            <a href="employees.html">Сотрудники</a>
-            <a href="about.html">О компании</a>
-            <a href="contacts.html">Контакты</a>
+        <div class="footer__bottom">
+            <div class="container footer__bottom-inner">
+                <p>© 2026 SibAvto. Все права защищены.</p>
+            </div>
         </div>
-        <div class="footer__col">
-            <h4>Помощь</h4>
-            <a href="delivery.html">Доставка и оплата</a>
-            <a href="warranty.html">Гарантия и возврат</a>
-            <a href="faq.html">Частые вопросы</a>
-        </div>
-        <div class="footer__col">
-            <h4>Контакты</h4>
-            <p>+7 (383) 123-45-67</p>
-            <p>info@sibavto.ru</p>
-            <p>г. Новосибирск, ул. Автозаводская, 15</p>
-        </div>
-    </div>
-    <div class="footer__bottom">
-        <p>2026 SibAvto. Все права защищены.</p>
-    </div>
-</footer>
+    </footer>
 
     <script src="js/main.js"></script>
     <script src="js/chat-bot.js"></script>
