@@ -21,15 +21,53 @@ function togglePayment(type) {
 document.addEventListener('DOMContentLoaded', function () {
 
     const currentUser = JSON.parse(localStorage.getItem('sibavto_current_user') || 'null');
+    let userBonuses = 0;
+    let bonusDiscount = 0;
 
+    // === ИНИЦИАЛИЗАЦИЯ БОНУСОВ ===
     if (currentUser) {
+        userBonuses = parseInt(localStorage.getItem('sibavto_bonuses_' + currentUser.id) || '0');
+        
         document.getElementById('customerName').value = currentUser.fullName || '';
         document.getElementById('customerPhone').value = currentUser.phone || '';
         document.getElementById('customerEmail').value = currentUser.email || '';
+
+        // Показываем блок бонусов
+        if (userBonuses > 0) {
+            const bonusesSection = document.getElementById('bonusesSection');
+            const availableEl = document.getElementById('availableBonuses');
+            if (bonusesSection && availableEl) {
+                bonusesSection.style.display = 'block';
+                availableEl.textContent = userBonuses;
+            }
+        }
     }
 
     const addressBlock = document.getElementById('addressBlock');
     const savedAddressesList = document.getElementById('savedAddressesList');
+
+    // === ЛОГИКА СПИСАНИЯ БОНУСОВ ===
+    const useBonusesCheckbox = document.getElementById('useBonuses');
+    if (useBonusesCheckbox) {
+        useBonusesCheckbox.addEventListener('change', function() {
+            const cart = JSON.parse(localStorage.getItem('sibavto_cart') || '[]');
+            let total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+            
+            const maxDiscount = Math.min(Math.floor(total * 0.5), userBonuses);
+            
+            if (this.checked) {
+                bonusDiscount = maxDiscount;
+                if (typeof showToast === 'function') showToast(`Списано бонусов: ${bonusDiscount} руб.`, 'success');
+            } else {
+                bonusDiscount = 0;
+            }
+
+            // Пересчитываем итог
+            if (typeof updateCartSummary === 'function') {
+                updateCartSummary(total - bonusDiscount);
+            }
+        });
+    }
 
     // Показываем блок адреса, если курьер выбран по умолчанию
     const initialDelivery = document.querySelector('input[name="delivery"]:checked');
@@ -180,18 +218,21 @@ document.addEventListener('DOMContentLoaded', function () {
     // ============ СОХРАНЕНИЕ ЗАКАЗА ============
     function completeOrder(cart, delivery, payment, address, comment) {
         const orderNumber = '2026-' + Math.floor(1000 + Math.random() * 9000);
-        const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+        let total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+
+        // Применяем скидку
+        total = total - bonusDiscount;
 
         const order = {
             number: orderNumber,
             items: cart,
             total: total,
-            status: 'new', // Начальный статус
+            status: 'new',
             deliveryMethod: delivery,
             address: address,
             paymentMethod: payment,
             comment: comment,
-            createdAt: new Date().toISOString() // Фиксируем время
+            createdAt: new Date().toISOString()
         };
 
         if (currentUser) {
@@ -199,10 +240,24 @@ document.addEventListener('DOMContentLoaded', function () {
             const orders = JSON.parse(localStorage.getItem(ordersKey) || '[]');
             orders.unshift(order);
             localStorage.setItem(ordersKey, JSON.stringify(orders));
+
+            // 1. СПИСАНИЕ БОНУСОВ
+            let newBalance = userBonuses;
+            if (bonusDiscount > 0) {
+                newBalance = newBalance - bonusDiscount;
+                console.log(`Списано бонусов: ${bonusDiscount}`);
+            }
+
+            // 2. НАЧИСЛЕНИЕ НОВЫХ БОНУСОВ (5% от оплаченной суммы)
+            const earnedBonuses = Math.floor(total * 0.05);
+            newBalance = newBalance + earnedBonuses;
+            localStorage.setItem('sibavto_bonuses_' + currentUser.id, newBalance);
+            
+            console.log(`Начислено бонусов: ${earnedBonuses}. Новый баланс: ${newBalance}`);
         }
 
         localStorage.removeItem('sibavto_cart');
-        showToast('Заказ №' + orderNumber + ' оформлен!', 'success');
+        showToast('Заказ №' + orderNumber + ' оформлен! Начислено бонусов: ' + Math.floor(total * 0.05), 'success');
 
         setTimeout(() => {
             window.location.href = currentUser ? 'profile.html' : 'index.html';

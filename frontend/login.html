@@ -28,15 +28,42 @@
 
     <!-- Модальное окно "Восстановление пароля" -->
     <div class="modal" id="forgotModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 9999; align-items: center; justify-content: center; backdrop-filter: blur(4px);">
-        <div style="background: #fff; padding: 32px; border-radius: 16px; max-width: 400px; width: 90%; text-align: center; box-shadow: 0 20px 40px rgba(0,0,0,0.2);">
-            <div style="font-size: 40px; margin-bottom: 16px;">🔑</div>
-            <h2 style="margin-bottom: 12px; color: #1a2332; font-size: 22px;">Восстановление пароля</h2>
-            <p style="font-size: 14px; color: #666; margin-bottom: 24px; line-height: 1.5;">Введите ваш email, и мы отправим ссылку для сброса пароля.</p>
-            <form id="forgotForm">
-                <input type="email" id="forgotEmail" placeholder="Ваш E-mail" required style="width: 100%; padding: 14px 16px; border: 2px solid #e0e0e0; border-radius: 8px; margin-bottom: 20px; font-family: inherit; font-size: 15px; outline: none; transition: border-color 0.2s;" onfocus="this.style.borderColor='#e63946'" onblur="this.style.borderColor='#e0e0e0'">
-                <button type="submit" class="btn btn--primary btn--full" style="margin-bottom: 12px; padding: 14px; font-size: 16px;">Отправить ссылку</button>
-                <button type="button" id="closeForgotModal" style="background: none; border: none; color: #888; cursor: pointer; font-size: 14px; font-family: inherit;">Отмена</button>
-            </form>
+        <div style="background: #fff; padding: 32px; border-radius: 16px; max-width: 400px; width: 90%; box-shadow: 0 20px 40px rgba(0,0,0,0.2); position: relative;">
+            <button type="button" id="closeForgotModal" style="position: absolute; top: 16px; right: 16px; background: none; border: none; font-size: 20px; cursor: pointer; color: #888;">✕</button>
+            
+            <!-- Шаг 1 -->
+            <div id="step1">
+                <div style="font-size: 40px; margin-bottom: 16px; text-align: center;">🔑</div>
+                <h2 style="margin-bottom: 12px; color: #1a2332; font-size: 22px; text-align: center;">Восстановление</h2>
+                <p style="font-size: 14px; color: #666; margin-bottom: 24px; line-height: 1.5; text-align: center;">Введите телефон или email, привязанный к аккаунту.</p>
+                <form id="forgotFormStep1">
+                    <input type="text" id="forgotContact" placeholder="Телефон или Email" required style="width: 100%; padding: 14px 16px; border: 2px solid #e0e0e0; border-radius: 8px; margin-bottom: 20px; font-family: inherit; font-size: 15px; outline: none;">
+                    <button type="submit" class="btn btn--primary btn--full" style="padding: 14px; font-size: 16px;">Получить код</button>
+                </form>
+            </div>
+
+            <!-- Шаг 2 -->
+            <div id="step2" style="display: none;">
+                <div style="font-size: 40px; margin-bottom: 16px; text-align: center;">📩</div>
+                <h2 style="margin-bottom: 12px; color: #1a2332; font-size: 22px; text-align: center;">Введите код</h2>
+                <p style="font-size: 14px; color: #666; margin-bottom: 24px; line-height: 1.5; text-align: center;">Код отправлен на <strong id="sentToDisplay"></strong>. (Код в консоли F12)</p>
+                <form id="forgotFormStep2">
+                    <input type="text" id="forgotCode" placeholder="000000" maxlength="6" required style="width: 100%; padding: 14px 16px; border: 2px solid #e0e0e0; border-radius: 8px; margin-bottom: 20px; font-family: inherit; font-size: 24px; text-align: center; letter-spacing: 8px; outline: none;">
+                    <button type="submit" class="btn btn--primary btn--full" style="padding: 14px; font-size: 16px;">Проверить код</button>
+                </form>
+            </div>
+
+            <!-- Шаг 3 -->
+            <div id="step3" style="display: none;">
+                <div style="font-size: 40px; margin-bottom: 16px; text-align: center;">🔒</div>
+                <h2 style="margin-bottom: 12px; color: #1a2332; font-size: 22px; text-align: center;">Новый пароль</h2>
+                <p style="font-size: 14px; color: #666; margin-bottom: 24px; line-height: 1.5; text-align: center;">Придумайте новый пароль для входа.</p>
+                <form id="forgotFormStep3">
+                    <input type="password" id="newPassword" placeholder="Новый пароль" required minlength="6" style="width: 100%; padding: 14px 16px; border: 2px solid #e0e0e0; border-radius: 8px; margin-bottom: 12px; font-family: inherit; font-size: 15px; outline: none;">
+                    <input type="password" id="newPasswordConfirm" placeholder="Повторите пароль" required minlength="6" style="width: 100%; padding: 14px 16px; border: 2px solid #e0e0e0; border-radius: 8px; margin-bottom: 20px; font-family: inherit; font-size: 15px; outline: none;">
+                    <button type="submit" class="btn btn--primary btn--full" style="padding: 14px; font-size: 16px;">Сохранить пароль</button>
+                </form>
+            </div>
         </div>
     </div>
 

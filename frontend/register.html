@@ -19,7 +19,23 @@
                 <input type="email" id="regEmail" placeholder="E-mail" required>
                 <input type="password" id="regPassword" placeholder="Пароль" required minlength="6">
                 <input type="password" id="regPassword2" placeholder="Повтор пароля" required>
-                <button type="submit" class="btn btn--primary btn--full">Зарегистрироваться</button>
+
+                <!-- Тип лица -->
+                <div style="display: flex; gap: 16px; font-size: 14px; color: #555; margin-top: 4px;">
+                    <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+                        <input type="radio" name="entityType" value="physical" checked> Физ. лицо
+                    </label>
+                    <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+                        <input type="radio" name="entityType" value="legal"> Юр. лицо
+                    </label>
+                </div>
+
+                <!-- Админ (для тестов) -->
+                <label style="display: flex; align-items: center; gap: 8px; font-size: 13px; color: #888; margin-top: 8px; cursor: pointer;">
+                    <input type="checkbox" id="isAdminReg"> Зарегистрироваться как администратор
+                </label>
+
+                <button type="submit" class="btn btn--primary btn--full" style="margin-top: 12px;">Зарегистрироваться</button>
             </form>
             <p class="auth__link">
                 Уже есть аккаунт? <a href="login.html">Войти</a>

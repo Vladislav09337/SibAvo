@@ -69,20 +69,16 @@
                         <h3 style="font-size: 16px; margin-bottom: 12px; color: #1a2332;">Выберите адрес доставки</h3>
                         <div id="savedAddressesList"></div>
                         <div style="margin-top: 12px;">
-                            <a href="profile.html#addresses" class="btn btn--outline btn--small" style="color: #1a2332; border-color: #1a2332;">
-                                + Добавить новый адрес в профиль
-                            </a>
+                            <a href="profile.html#addresses" class="btn btn--outline btn--small" style="color: #1a2332; border-color: #1a2332;">+ Добавить новый адрес в профиль</a>
                         </div>
                         <div style="margin-top: 16px;">
-                            <label style="display: block; font-size: 14px; color: #555; margin-bottom: 6px;">
-                                Или введите адрес вручную (он сохранится в профиль):
-                            </label>
+                            <label style="display: block; font-size: 14px; color: #555; margin-bottom: 6px;">Или введите адрес вручную (он сохранится в профиль):</label>
                             <input type="text" id="manualAddress" placeholder="Город, улица, дом, квартира">
                         </div>
                     </div>
                 </section>
 
-                <!-- КАРТА -->
+                <!-- КАРТА ЯНДЕКС -->
                 <section class="checkout__section">
                     <h2>📍 Наш магазин на карте</h2>
                     <div class="checkout__map">
@@ -119,7 +115,6 @@
                                 <span id="cardPreviewExpiry">MM/YY</span>
                             </div>
                         </div>
-
                         <div class="form__row">
                             <input type="text" id="cardNumber" placeholder="Номер карты" maxlength="19" required>
                             <input type="text" id="cardHolder" placeholder="Имя держателя" required>
@@ -134,16 +129,12 @@
                         <input type="radio" name="payment" value="sbp" onchange="togglePayment('sbp')">
                         <span>📱 СБП (Система быстрых платежей)</span>
                     </label>
-
                     <div id="sbpBlock" class="payment-sbp" style="display: none;">
                         <p style="margin-bottom: 16px; color: #555;">Отсканируйте QR-код в приложении вашего банка:</p>
                         <div class="payment-sbp-qr">
                             <img src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=https://sibavto.ru/pay/order" alt="QR-код для оплаты" style="border-radius: 8px;">
                         </div>
-                        <p style="margin-top: 16px; font-size: 13px; color: #888;">
-                            Или перейдите по ссылке в приложении банка: <br>
-                            <a href="#" style="color: #e63946;">sibavto.ru/pay/order</a>
-                        </p>
+                        <p style="margin-top: 16px; font-size: 13px; color: #888;">Или перейдите по ссылке в приложении банка: <br><a href="#" style="color: #e63946;">sibavto.ru/pay/order</a></p>
                     </div>
 
                     <label class="radio">
@@ -155,8 +146,26 @@
                         <input type="radio" name="payment" value="card_on_delivery" onchange="togglePayment('card_on_delivery')">
                         <span>💳 Картой при получении</span>
                     </label>
-                </section>
 
+                    <!-- Оплата по счету (только для юр. лиц) -->
+                    <label class="radio" id="paymentInvoiceLabel" style="display: none;">
+                        <input type="radio" name="payment" value="invoice" onchange="togglePayment('invoice')">
+                        <span>🧾 Оплата по счету (для юр. лиц)</span>
+                    </label>
+                </section>
+                 <section class="checkout__section" id="bonusesSection" style="display: none;">
+                    <h2>🎁 Бонусы</h2>
+                    <div style="display: flex; align-items: center; justify-content: space-between; background: #fff8e1; padding: 16px; border-radius: 8px; border: 1px solid #ffc107;">
+                        <div>
+                            <p style="font-size: 14px; color: #856404; margin-bottom: 4px;">Доступно бонусов:</p>
+                            <strong style="font-size: 20px; color: #1a2332;"><span id="availableBonuses">0</span> руб.</strong>
+                        </div>
+                        <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-weight: 600; color: #1a2332;">
+                            <input type="checkbox" id="useBonuses" style="width: 20px; height: 20px; accent-color: #e63946;">
+                            Списать все
+                        </label>
+                    </div>
+                </section>
                 <!-- КОММЕНТАРИЙ -->
                 <section class="checkout__section">
                     <h2>Комментарий к заказу</h2>

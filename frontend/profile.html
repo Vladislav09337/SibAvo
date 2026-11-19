@@ -35,18 +35,9 @@
                 </button>
                 <div class="user-menu__dropdown" id="userDropdown">
                     <a href="profile.html" class="user-menu__item"><span>👤</span> Мой профиль</a>
-                    <a href="profile.html#favorites" class="user-menu__item">
-                        <span>★</span> Избранное
-                        <span class="user-menu__badge" id="favoritesBadge">0</span>
-                    </a>
-                    <a href="compare.html" class="user-menu__item">
-                        <span>⚖</span> Сравнение
-                        <span class="user-menu__badge" id="compareBadge">0</span>
-                    </a>
-                    <a href="cart.html" class="user-menu__item">
-                        <span>🛒</span> Корзина
-                        <span class="user-menu__badge" id="cartBadge">0</span>
-                    </a>
+                    <a href="profile.html#favorites" class="user-menu__item"><span>★</span> Избранное <span class="user-menu__badge" id="favoritesBadge">0</span></a>
+                    <a href="compare.html" class="user-menu__item"><span>⚖</span> Сравнение <span class="user-menu__badge" id="compareBadge">0</span></a>
+                    <a href="cart.html" class="user-menu__item"><span>🛒</span> Корзина <span class="user-menu__badge" id="cartBadge">0</span></a>
                     <div class="user-menu__divider"></div>
                     <a href="login.html" class="user-menu__item user-menu__item--login"><span>🔓</span> Войти / Регистрация</a>
                 </div>
@@ -70,16 +61,15 @@
                         <a href="#" class="profile__menu-item" data-tab="orders">Мои заказы</a>
                         <a href="#" class="profile__menu-item" data-tab="favorites">Избранное</a>
                         <a href="#" class="profile__menu-item" data-tab="addresses">Адреса доставки</a>
+                        <a href="#" class="profile__menu-item" data-tab="bonuses">Бонусы и скидки</a>
                         <a href="#" class="profile__menu-item" data-tab="settings">Настройки</a>
                     </nav>
 
-                    <!-- КНОПКА ВЫХОДА (с onclick) -->
-                    <button class="btn btn--outline btn--full" id="logoutBtn" onclick="logoutUser()" style="margin-top: 20px; border-color: #e63946; color: #e63946;">
-                        Выйти
-                    </button>
+                    <button class="btn btn--outline btn--full" id="logoutBtn" onclick="logoutUser()" style="margin-top: 20px; border-color: #e63946; color: #e63946;">Выйти</button>
                 </aside>
 
                 <div class="profile__content">
+                    <!-- ЛИЧНЫЕ ДАННЫЕ -->
                     <section class="profile__tab profile__tab--active" data-tab="info">
                         <h2>Личные данные</h2>
                         <form class="profile__form" id="profileInfoForm">
@@ -92,16 +82,19 @@
                         </form>
                     </section>
 
+                    <!-- ЗАКАЗЫ -->
                     <section class="profile__tab" data-tab="orders">
                         <h2>Мои заказы</h2>
                         <div id="ordersList"></div>
                     </section>
 
+                    <!-- ИЗБРАННОЕ -->
                     <section class="profile__tab" data-tab="favorites">
                         <h2>Избранное</h2>
                         <div id="favoritesList"></div>
                     </section>
 
+                    <!-- АДРЕСА -->
                     <section class="profile__tab" data-tab="addresses">
                         <h2>Адреса доставки</h2>
                         <form class="address__form" id="addressForm">
@@ -115,6 +108,21 @@
                         <div id="addressesList"></div>
                     </section>
 
+                    <!-- БОНУСЫ -->
+                    <section class="profile__tab" data-tab="bonuses">
+                        <h2>Бонусы и скидки</h2>
+                        <div style="background: linear-gradient(135deg, #1a2332, #2c3e50); color: #fff; padding: 32px; border-radius: 12px; text-align: center; margin-bottom: 24px;">
+                            <p style="font-size: 14px; color: #c5cdd8; margin-bottom: 8px;">Ваш бонусный баланс</p>
+                            <div style="font-size: 48px; font-weight: 800; color: #ffc107;" id="bonusBalance">0</div>
+                            <p style="font-size: 14px; color: #c5cdd8; margin-top: 8px;">1 бонус = 1 рубль</p>
+                        </div>
+                        <p style="font-size: 14px; color: #666; line-height: 1.6;">
+                            За каждый заказ мы начисляем <strong>5% кэшбэка</strong> бонусами. 
+                            Вы можете оплатить ими до 50% от суммы следующего заказа. Бонусы не сгорают.
+                        </p>
+                    </section>
+
+                    <!-- НАСТРОЙКИ -->
                     <section class="profile__tab" data-tab="settings">
                         <h2>Настройки</h2>
                         <div class="profile__setting">

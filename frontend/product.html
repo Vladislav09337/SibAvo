@@ -22,11 +22,7 @@
                 <a href="integrations.html" class="nav__link">Интеграции</a>
             </nav>
             <div class="user-menu">
-                <button class="user-menu__btn" id="userMenuBtn">
-                    <span class="user-menu__avatar">👤</span>
-                    <span class="user-menu__name">Профиль</span>
-                    <span class="user-menu__arrow">▾</span>
-                </button>
+                <button class="user-menu__btn" id="userMenuBtn"><span class="user-menu__avatar">👤</span><span class="user-menu__name">Профиль</span><span class="user-menu__arrow">▾</span></button>
                 <div class="user-menu__dropdown" id="userDropdown">
                     <a href="profile.html" class="user-menu__item"><span>👤</span> Мой профиль</a>
                     <a href="profile.html#favorites" class="user-menu__item"><span>★</span> Избранное <span class="user-menu__badge" id="favoritesBadge">0</span></a>
@@ -44,23 +40,33 @@
             <nav class="breadcrumbs" id="breadcrumbs"></nav>
             <div class="product__detail" id="productDetail"></div>
 
-            <!-- АНАЛОГИ -->
-            <section class="product__analogues" id="analoguesSection">
-                <h2 class="section__title">🔄 Аналоги от других производителей</h2>
-                <div class="products__grid" id="analoguesProducts"></div>
+            <!-- ОТЗЫВЫ -->
+            <section class="product__reviews" style="margin-top: 40px; background: #fff; padding: 32px; border-radius: 12px;">
+                <h2 class="section__title" style="text-align: left;">Отзывы покупателей</h2>
+                <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 24px;">
+                    <div style="font-size: 36px; font-weight: 800; color: #e63946;" id="avgRating">0.0</div>
+                    <div>
+                        <div style="color: #ffc107; font-size: 20px;" id="avgStars">☆☆☆☆☆</div>
+                        <div style="font-size: 13px; color: #888;">На основе <span id="reviewCount">0</span> отзывов</div>
+                    </div>
+                </div>
+                <form id="reviewForm" style="background: #f9f9f9; padding: 20px; border-radius: 8px; margin-bottom: 24px;">
+                    <h3 style="font-size: 16px; margin-bottom: 12px;">Оставить отзыв</h3>
+                    <div style="margin-bottom: 12px;">
+                        <select id="reviewRating" required style="padding: 8px; border-radius: 4px; border: 1px solid #ddd;">
+                            <option value="5">⭐⭐⭐⭐⭐ Отлично</option><option value="4">⭐⭐⭐⭐ Хорошо</option><option value="3">⭐⭐⭐ Нормально</option><option value="2">⭐⭐ Плохо</option><option value="1">⭐ Ужасно</option>
+                        </select>
+                    </div>
+                    <textarea id="reviewText" placeholder="Напишите ваш отзыв..." required style="width: 100%; min-height: 80px; padding: 10px; border: 1px solid #ddd; border-radius: 6px; margin-bottom: 12px; font-family: inherit;"></textarea>
+                    <button type="submit" class="btn btn--primary btn--small">Отправить отзыв</button>
+                </form>
+                <div id="reviewsList"></div>
             </section>
 
-            <!-- ПОХОЖИЕ -->
-            <section class="product__similar" id="similarSection">
-                <h2 class="section__title">Похожие товары</h2>
-                <div class="products__grid" id="similarProducts"></div>
-            </section>
-
-            <!-- НЕДАВНО СМОТРЕЛИ -->
-            <section class="product__recent" id="recentSection">
-                <h2 class="section__title">Вы недавно смотрели</h2>
-                <div class="products__grid" id="recentProducts"></div>
-            </section>
+            <!-- АНАЛОГИ, ПОХОЖИЕ, НЕДАВНО СМОТРЕЛИ -->
+            <section class="product__analogues" id="analoguesSection"><h2 class="section__title">🔄 Аналоги от других производителей</h2><div class="products__grid" id="analoguesProducts"></div></section>
+            <section class="product__similar" id="similarSection"><h2 class="section__title">Похожие товары</h2><div class="products__grid" id="similarProducts"></div></section>
+            <section class="product__recent" id="recentSection"><h2 class="section__title">Вы недавно смотрели</h2><div class="products__grid" id="recentProducts"></div></section>
         </div>
     </main>
 
@@ -68,45 +74,10 @@
         <div class="footer__bg"></div>
         <div class="container footer__content">
             <div class="footer__main">
-                <div class="footer__col">
-                    <a href="index.html" class="footer__logo">Sib<span>Avto</span></a>
-                    <p class="footer__desc">Лицензированный продавец автозапчастей в Новосибирске.</p>
-                    <p class="footer__license">Лицензия № 54-АА-123456 от 01.01.2020</p>
-                </div>
-                <div class="footer__col">
-                    <h4>Разделы</h4>
-                    <a href="catalog.html">Каталог</a>
-                    <a href="employees.html">Сотрудники</a>
-                    <a href="about.html">О компании</a>
-                    <a href="contacts.html">Контакты</a>
-                </div>
-                <div class="footer__col">
-                    <h4>Помощь</h4>
-                    <a href="delivery.html">Доставка и оплата</a>
-                    <a href="warranty.html">Гарантия и возврат</a>
-                    <a href="faq.html">Частые вопросы</a>
-                    <a href="info.html">Информация</a>
-                </div>
-                <div class="footer__col">
-                    <h4>Контакты</h4>
-                    <a href="tel:+73831234567" class="footer__phone">+7 (383) 123-45-67</a>
-                    <a href="mailto:info@sibavto.ru">info@sibavto.ru</a>
-                    <p class="footer__address">г. Новосибирск, ул. Автозаводская, 15</p>
-                    <p class="footer__time">
-                        <strong>Пн–Пт:</strong> 9:00–19:00<br>
-                        <strong>Сб:</strong> 10:00–17:00<br>
-                        <strong>Вс:</strong> выходной
-                    </p>
-                </div>
-            </div>
-        </div>
-        <div class="footer__bottom">
-            <div class="container footer__bottom-inner">
-                <p>© 2026 SibAvto. Все права защищены.</p>
-                <div class="footer__bottom-links">
-                    <a href="info.html">Политика конфиденциальности</a>
-                    <a href="info.html">Публичная оферта</a>
-                </div>
+                <div class="footer__col"><a href="index.html" class="footer__logo">Sib<span>Avto</span></a><p class="footer__desc">Лицензированный продавец автозапчастей в Новосибирске.</p><p class="footer__license">Лицензия № 54-АА-123456 от 01.01.2020</p></div>
+                <div class="footer__col"><h4>Разделы</h4><a href="catalog.html">Каталог</a><a href="employees.html">Сотрудники</a><a href="about.html">О компании</a><a href="contacts.html">Контакты</a></div>
+                <div class="footer__col"><h4>Помощь</h4><a href="delivery.html">Доставка и оплата</a><a href="warranty.html">Гарантия и возврат</a><a href="faq.html">Частые вопросы</a></div>
+                <div class="footer__col"><h4>Контакты</h4><a href="tel:+73831234567" class="footer__phone">+7 (383) 123-45-67</a><p>info@sibavto.ru</p></div>
             </div>
         </div>
     </footer>
